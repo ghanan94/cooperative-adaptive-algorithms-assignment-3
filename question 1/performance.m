@@ -40,3 +40,4 @@ function [ ISE, t_r, t_s, M_p ] = performance( sol )
     t_r = sysinf.RiseTime; % Rise time
     t_s = sysinf.SettlingTime; % Settling time
     M_p = sysinf.Overshoot; % Overshoot
+end
