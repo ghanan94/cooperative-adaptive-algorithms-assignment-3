@@ -33,15 +33,20 @@ function [ initial_population ] = initial_population(...
     min_Td, ...
     max_Td ...
 )
-    % Initial empty vector of solutions
-    initial_population = cell( 1, 2 );
+    % Initial empty matrix of solutions
+    % rows in population are each solution
+    % The last column wil be the fitness score
+    initial_population = zeros( num_initial_population, 4 );
 
     for i = 1:num_initial_population
         Kp = ( max_Kp - min_Kp ) * rand() + min_Kp;
         Ti = ( max_Ti - min_Ti ) * rand() + min_Ti;
         Td = ( max_Td - min_Td ) * rand() + min_Td;
  
-        initial_population{i} = [ Kp Ti Td ];
+        solution = [ Kp Ti Td 0 ];
+        solution( 4 ) = fitness( solution );
+
+        initial_population( i, : ) = solution;
     end
 end
 

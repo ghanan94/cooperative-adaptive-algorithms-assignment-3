@@ -47,10 +47,24 @@ function [ solution ] = solution(...
     min_Td, ...
     max_Td ...
 )
-    population = initial_population( num_initial_population, min_Kp, max_Kp, min_Ti, max_Ti, min_Td, max_Td );
+    % Rows in population are each solution.
+    % Col1 = Kp, Col2 = Ti, Col3 = Td.
+    % The last column (Col4) wil be the fitness score.
 
-    % TODO: Implement GA
+    % Generate initial population
+    [ population ] = initial_population( num_initial_population, min_Kp, max_Kp, min_Ti, max_Ti, min_Td, max_Td );
 
-    solution = population{1};
+    % Get max fitness
+    [ fM, fI ] = max( population( :, 4 ) );
+
+    % Best solution so far so be the solution with the best fitness so far
+    best_solution = population( fI, : );
+    best_solution_fitness = fM;
+
+    for generation = 1:generations
+        
+    end
+
+    solution = best_solution(1:3);
 end
 
