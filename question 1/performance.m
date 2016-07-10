@@ -8,12 +8,10 @@
 %              is G(s) = Kp*(1 + (1/(Ti*s)) + (Td*s)).
 %
 % PARAMETERS:
-%  Kp
-%    - PID Parameter.
-%  Ti
-%    - PID Parameter.
-%  Td
-%    - PID Parameter.
+%  sol (Array: [Kp Ti Td])
+%    - A vector representing a solution. The vector must have 3 values.
+%      The first value (sol(0)) is Kp. The second value (sol(1)), is Ti.
+%      The third value (sol(2)), is Td.
 %
 % RETURNS:
 %   ISE
@@ -25,7 +23,11 @@
 %   M_p
 %     - Overshoot.
 %
-function [ ISE, t_r, t_s, M_p ] = performance( Kp, Ti, Td )
+function [ ISE, t_r, t_s, M_p ] = performance( sol )
+    Kp = sol(0);
+    Ti = sol(1);
+    Td = sol(2);
+    
     G = Kp * tf( [ Ti * Td, Ti, 1 ], [ Ti, 0 ] );
 
     F = tf( 1, [ 1, 6, 11, 6, 0 ] );

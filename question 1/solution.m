@@ -16,12 +16,35 @@
 %    - Probability of solution parameters crossing over.
 %  mutation_probability (decimal)
 %    - Probability of solution parameters mutating.
+%  min_Kp
+%    - Min value for Kp, not-inclusive.
+%  max Kp
+%    - Max value for Kp, not-inclusive.
+%  min_Ti
+%    - Min value for Ti, not-inclusive.
+%  max Ti
+%    - Max value for Ti, not-inclusive.
+%  min_Td
+%    - Min value for Td, not-inclusive.
+%  max Td
+%    - Max value for Td, not-inclusive.
 %
 % RETURNS:
 %   sol
 %     - Best solution so far.
 %
-function [ sol ] = solution( initial_population, generations, crossover_probability, mutation_probability )
+function [ sol ] = solution(...
+    initial_population, ...
+    generations, ...
+    crossover_probability, ...
+    mutation_probability, ...
+    min_Kp, ...
+    max_Kp, ...
+    min_Ti, ...
+    max_Ti, ...
+    min_Td, ...
+    max_Td ...
+)
 
 end
 
