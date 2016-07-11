@@ -22,7 +22,7 @@ void ACO_TSP::print_cities()
 
   for( int i = 0; i < cities.size(); ++i )
   {
-    printf("City #%02d @ ( %f, %f )\n", i, cities[i]->get_x(), cities[i]->get_y() );
+    printf( "City #%02d @ ( %06.1f, %06.1f )\n", i, cities[ i ]->get_x(), cities[ i ]->get_y() );
   }
 }
 
