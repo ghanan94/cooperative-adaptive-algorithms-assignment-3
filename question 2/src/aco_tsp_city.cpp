@@ -1,4 +1,4 @@
-#include "aco_tsp_city.hpp"
+#include "aco_tsp_city.hpp" // ACO_TSP::CITY
 
 ACO_TSP::City::City( const double x, const double y ) :
 x( x ),

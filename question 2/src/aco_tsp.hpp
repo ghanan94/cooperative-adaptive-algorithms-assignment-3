@@ -1,8 +1,8 @@
 #ifndef __ACO_TSP__
 #define __ACO_TSP__
 
-#include <vector>
-#include <string>
+#include <vector> // std::vector
+#include <string> // std::string
 
 /*
  * NAME:          ACO_TSP
@@ -59,12 +59,13 @@ public:
    * DESCRIPTION:   Solve the TSP using ACO.
    *
    * PARAMETERS:
-   *   N/A
+   *   const unsigned int population_size
+   *     - Number of agents.
    *
    * RETURNS:
    *   N/A
    */
-  void solve() const;
+  void solve( const unsigned int ) const;
 
 private:
   /*

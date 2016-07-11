@@ -1,7 +1,7 @@
 #ifndef __ACO_TSP_CITY__
 #define __ACO_TSP_CITY__
 
-#include "aco_tsp.hpp"
+#include "aco_tsp.hpp" // ACO_TSP
 
 /*
  * NAME:          City

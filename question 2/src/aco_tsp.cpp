@@ -1,4 +1,4 @@
-#include "aco_tsp.hpp"
+#include "aco_tsp.hpp" // ACO_TSP
 #include "aco_tsp_city.hpp" // ACO_TSP::City
 #include <fstream> // std::ifstream, std::getline
 #include <sstream> // std::stringstream
@@ -27,7 +27,7 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve() const
+void ACO_TSP::solve( const unsigned int population_size ) const
 {
 
 }
@@ -74,7 +74,7 @@ void ACO_TSP::parse_problem_file( const std::string file_name )
 
 /*
  * Euclidean distance is calculated between two points ( x1, y1 ) and ( x2, y2 )
- * as sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) ). 
+ * as sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) ).
  */
 const double ACO_TSP::distance( ACO_TSP::City const * const city_a, ACO_TSP::City const * const city_b ) const
 {
