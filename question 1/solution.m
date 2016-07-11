@@ -32,7 +32,7 @@
 %    - Max value for Td, not-inclusive.
 %
 % RETURNS:
-%   sol
+%   solution
 %     - Best solution so far.
 %
 function [ solution ] = solution(...
@@ -61,11 +61,11 @@ function [ solution ] = solution(...
     best_solution = population( fI, : );
 
     for generation = 1:generations
-        % TODO: Get list of all parents that will have offspring
+        % Get list of all parents that will have offspring
         selected_parents = parent_selection( population );
    
-        
         % TODO: Crossover and mutate the parents to get new new pool
+        offspring = generate_offspring( selected_parents, crossover_probability, mutation_probability );
 
         % TODO: With new generation, update best_solution if required
     end
