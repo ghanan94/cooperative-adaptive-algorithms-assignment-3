@@ -20,6 +20,6 @@ function [ fitness ] = fitness( solution )
     % TODO: Implement a better fitness algorithm.
     % Current one is just to get the ball rolling with the rest of the
     % GA algorithm.
-    fitness = t_r + t_s + M_p - ISE;
+    fitness = -1 * ISE;
 end
 

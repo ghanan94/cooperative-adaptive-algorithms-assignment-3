@@ -16,25 +16,35 @@
 %     - A subset of the population that will have children.
 %
 function [ selected_parents ] = parent_selection( population )
+    % Sum of all fitnesses
     sum_fitness = sum( population( :, 4 ) );
-    [ ~, sorted_indexes ] = sort( population( :, 4 ), 'descend' );
-    fitness_sorted_population = population( sorted_indexes, : );
+       
+    % Commended out below because populationw will already be sorted by the
+    % time parent_selection is called. initial_population and
+    % survivor_selection will return a sorted population.
+    %
+    % Sort population by fitness (descending order)
+    % [ ~, sorted_indexes ] = sort( population( :, 4 ), 'descend' );
+    % fitness_sorted_population = population( sorted_indexes, : );
 
+    % Initialize a matrix representing solutions to have offspring
     selected_parents = zeros( length(population), 4 );
 
+    % Using Fitness-porportionate selection's roulette wheel algorithm,
+    % Select n solutions (some may repeat) that will create offspring.
     for i = 1:length( population )
         rand_sum = rand() * sum_fitness;
         idx = length(population);
 
         for j = 1:length( population )
-            rand_sum = rand_sum - fitness_sorted_population( j, 4 );
+            rand_sum = rand_sum - population( j, 4 ); % rand_sum = rand_sum - fitness_sorted_population( j, 4 );
 
             if rand_sum <= 0
                 idx = j;
             end
         end
 
-        selected_parents( i, : ) = fitness_sorted_population( idx, : );
+        selected_parents( i, : ) = population( idx, : ); % elected_parents( i, : ) = fitness_sorted_population( idx, : );
     end
 end
 

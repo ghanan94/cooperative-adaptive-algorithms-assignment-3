@@ -54,14 +54,16 @@ function [ solution ] = solution(...
     % Generate initial population
     [ population ] = initial_population( num_initial_population, min_Kp, max_Kp, min_Ti, max_Ti, min_Td, max_Td );
 
-    % Get max fitness
-    [ ~, fI ] = max( population( :, 4 ) );
-
     % Best solution so far so be the solution with the best fitness so far
-    best_solution = population( fI, : );
+    % Solution with the best fitness so far will be at the front of
+    % population as initial_population will sort the population before
+    % returning
+    best_solution = population( 1, : );
     fprintf( 'Initial best solution was %d\n', best_solution(4) );
 
     for generation = 1:generations
+        fprintf( 'Generation #%d\n', generation );
+        
         % Get list of all parents that will have offspring
         selected_parents = parent_selection( population );
 
@@ -80,6 +82,6 @@ function [ solution ] = solution(...
         end
     end
 
-    solution = best_solution(1:3);
+    solution = best_solution( 1:3 );
 end
 

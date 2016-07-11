@@ -56,7 +56,7 @@ function [ offspring ] = generate_offspring( ...
                 offspring( i + 1, j ) = tmp;
             end
 
-            %mutation for first offspring
+            % Mutation for first offspring
             if rand() <= mutation_probability
                 switch j
                     case 1
@@ -70,7 +70,7 @@ function [ offspring ] = generate_offspring( ...
                 end
             end
 
-            %mutation for second offspring
+            % Mutation for second offspring
             if rand() <= mutation_probability
                 switch j
                     case 1
@@ -80,7 +80,7 @@ function [ offspring ] = generate_offspring( ...
                     case 3
                         offspring( i + 1, j ) = ( max_Td - min_Td ) * rand() + min_Td;
                     otherwise
-                        error('Unexpected j value');
+                        error( 'Unexpected j value [%d]', j );
                 end
             end
         end

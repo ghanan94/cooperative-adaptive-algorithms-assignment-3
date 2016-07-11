@@ -58,5 +58,9 @@ function [ initial_population ] = initial_population(...
 
         initial_population( i, : ) = solution;
     end
+    
+    % Sort initial population by fitness (descending order)
+    [ ~, sorted_indexes ] = sort( initial_population( :, 4 ), 'descend' );
+    initial_population = initial_population( sorted_indexes, : );
 end
 
