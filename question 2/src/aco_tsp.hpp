@@ -123,6 +123,8 @@ private:
    *     - The euclidean distance between the two cities.
    */
   double distance( City const * const, City const * const ) const;
+
+  double get_pheromone_value( std::vector<std::vector<double>> &, unsigned int const, unsigned int const );
 };
 
 #endif // __ACO_TSP__
