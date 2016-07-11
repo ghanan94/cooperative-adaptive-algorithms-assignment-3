@@ -18,13 +18,13 @@ public:
    * DESCRIPTION:   Constructor for ACO_TSP class.
    *
    * PARAMETERS:
-   *   const std::string file_name
+   *   std::string const file_name
    *     - Path to file that contains the TSP problem.
    *
    * RETURNS:
    *   N/A
    */
-  ACO_TSP( const std::string );
+  ACO_TSP( std::string const );
 
   /*
    * NAME:          ~ACO_TSP
@@ -59,20 +59,28 @@ public:
    * DESCRIPTION:   Solve the TSP using ACO.
    *
    * PARAMETERS:
-   *   const unsigned int population_size
+   *   unsigned int const population_size
    *     - Number of agents.
    *
    * RETURNS:
    *   N/A
    */
-  void solve( const unsigned int ) const;
+  void solve( unsigned int const ) const;
 
 private:
+  /*
+   * NAME:          Agent
+   *
+   * DESCRIPTION:   Forward-declared class. It is actually implemented in
+   *                aco_tsp_agent.hpp.
+   */
+  class Agent;
+
   /*
    * NAME:          City
    *
    * DESCRIPTION:   Forward-declared class. It is actually implemented in
-   *                aso_tsp_city.hpp.
+   *                aco_tsp_city.hpp.
    */
   class City;
 
@@ -97,7 +105,7 @@ private:
    * RETURNS:
    *   N/A
    */
-  void parse_problem_file( const std::string );
+  void parse_problem_file( std::string const );
 
   /*
    * NAME:          distance
@@ -114,7 +122,7 @@ private:
    *   double
    *     - The euclidean distance between the two cities.
    */
-  const double distance( City const * const, City const * const ) const;
+  double distance( City const * const, City const * const ) const;
 };
 
 #endif // __ACO_TSP__

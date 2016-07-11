@@ -3,8 +3,9 @@
 #include <fstream> // std::ifstream, std::getline
 #include <sstream> // std::stringstream
 #include <cmath> // pow, sqrt
+#include "aco_tsp_agent.hpp" // ACO_TSP::Agent
 
-ACO_TSP::ACO_TSP( const std::string file_name )
+ACO_TSP::ACO_TSP( std::string const file_name )
 {
   parse_problem_file( file_name );
 }
@@ -27,12 +28,21 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve( const unsigned int population_size ) const
+void ACO_TSP::solve( unsigned int const population_size ) const
 {
+  std::vector<ACO_TSP::Agent> agents;
+  unsigned int const num_cities = cities.size();
 
+  // Create agents and assign each to a city.
+  for ( int i = 0; i < population_size; ++i )
+  {
+    ACO_TSP::Agent agent( cities[ i % num_cities ] );
+
+    agents.push_back( agent );
+  }
 }
 
-void ACO_TSP::parse_problem_file( const std::string file_name )
+void ACO_TSP::parse_problem_file( std::string const file_name )
 {
   std::ifstream problem_file;
   std::string line;
@@ -76,7 +86,7 @@ void ACO_TSP::parse_problem_file( const std::string file_name )
  * Euclidean distance is calculated between two points ( x1, y1 ) and ( x2, y2 )
  * as sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) ).
  */
-const double ACO_TSP::distance( ACO_TSP::City const * const city_a, ACO_TSP::City const * const city_b ) const
+double ACO_TSP::distance( ACO_TSP::City const * const city_a, ACO_TSP::City const * const city_b ) const
 {
   return sqrt( pow( city_b->get_x() - city_a->get_x(), 2.0 ) + pow( city_b->get_y() - city_a->get_y(), 2.0 ) );
 }

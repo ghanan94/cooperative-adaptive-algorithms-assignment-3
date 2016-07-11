@@ -26,7 +26,7 @@ public:
    * RETURNS:
    *   N/A
    */
-  City( const double, const double );
+  City( double const, double const );
 
   /*
    * NAME:          get_x
@@ -37,10 +37,10 @@ public:
    *   N/A
    *
    * RETURNS:
-   *   const double
+   *   double const
    *     - The x coordinate.
    */
-  const double get_x() const;
+  double const get_x() const;
 
   /*
    * NAME:          get_y
@@ -51,10 +51,10 @@ public:
    *   N/A
    *
    * RETURNS:
-   *   const double
+   *   double const
    *     - The y coordinate.
    */
-  const double get_y() const;
+  double const get_y() const;
 
 private:
   /*
@@ -62,14 +62,14 @@ private:
    *
    * DESCRIPTION:   X coordinate of where a city is located.
    */
-  const double x;
+  double const x;
 
   /*
    * NAME:          y
    *
    * DESCRIPTION:   Y coordinate of where a city is located.
    */
-  const double y;
+  double const y;
 };
 
 #endif // __ACO_TSP_CITY__
