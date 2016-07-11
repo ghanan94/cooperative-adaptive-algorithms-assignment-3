@@ -55,14 +55,19 @@ function [ solution ] = solution(...
     [ population ] = initial_population( num_initial_population, min_Kp, max_Kp, min_Ti, max_Ti, min_Td, max_Td );
 
     % Get max fitness
-    [ fM, fI ] = max( population( :, 4 ) );
+    [ dump , fI ] = max( population( :, 4 ) );
 
     % Best solution so far so be the solution with the best fitness so far
     best_solution = population( fI, : );
-    best_solution_fitness = fM;
 
     for generation = 1:generations
+        % TODO: Get list of all parents that will have offspring
+        selected_parents = parent_selection( population );
+   
         
+        % TODO: Crossover and mutate the parents to get new new pool
+
+        % TODO: With new generation, update best_solution if required
     end
 
     solution = best_solution(1:3);

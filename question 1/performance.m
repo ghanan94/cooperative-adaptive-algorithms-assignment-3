@@ -24,9 +24,11 @@
 %     - Overshoot.
 %
 function [ ISE, t_r, t_s, M_p ] = performance( solution )
-    Kp = solution( :,1 );
-    Ti = solution( :,2 );
-    Td = solution( :,3 );
+    % Using solution ( :, 1 ) instead of solution(1), incase we pass in a
+    % population. If we pass in a population, do element wise calculations.
+    Kp = solution( :, 1 );
+    Ti = solution( :, 2 );
+    Td = solution( :, 3 );
     
     G = Kp * tf( [ Ti * Td, Ti, 1 ], [ Ti, 0 ] );
 
