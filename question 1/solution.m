@@ -77,7 +77,7 @@ function [ solution ] = solution(...
         % solution. If it is, update global best solution.
         % fprintf( 'Test best solution was %d\n', population( 1, 4 ) );
         if population( 1, 4 ) > best_solution( 4 )
-            fprintf( 'Old best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
+            fprintf( 'Previous best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
             best_solution = population( 1, : );
         end
     end
