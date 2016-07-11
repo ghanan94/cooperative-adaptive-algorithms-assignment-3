@@ -2,8 +2,9 @@
 #include "aco_tsp_city.hpp" // ACO_TSP::City
 #include <fstream> // std::ifstream, std::getline
 #include <sstream> // std::stringstream
+#include <cmath> // pow, sqrt
 
-ACO_TSP::ACO_TSP( std::string file_name )
+ACO_TSP::ACO_TSP( const std::string file_name )
 {
   parse_problem_file( file_name );
 }
@@ -16,7 +17,7 @@ ACO_TSP::~ACO_TSP()
   }
 }
 
-void ACO_TSP::print_cities()
+void ACO_TSP::print_cities() const
 {
   printf( "Cities: \n" );
 
@@ -26,7 +27,12 @@ void ACO_TSP::print_cities()
   }
 }
 
-void ACO_TSP::parse_problem_file( std::string file_name )
+void ACO_TSP::solve() const
+{
+
+}
+
+void ACO_TSP::parse_problem_file( const std::string file_name )
 {
   std::ifstream problem_file;
   std::string line;
@@ -64,4 +70,13 @@ void ACO_TSP::parse_problem_file( std::string file_name )
   {
     printf("File error\n");
   }
+}
+
+/*
+ * Euclidean distance is calculated between two points ( x1, y1 ) and ( x2, y2 )
+ * as sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) ). 
+ */
+const double ACO_TSP::distance( ACO_TSP::City const * const city_a, ACO_TSP::City const * const city_b ) const
+{
+  return sqrt( pow( city_b->get_x() - city_a->get_x(), 2.0 ) + pow( city_b->get_y() - city_a->get_y(), 2.0 ) );
 }

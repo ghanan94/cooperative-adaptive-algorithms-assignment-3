@@ -40,7 +40,7 @@ public:
    *   const double
    *     - The x coordinate.
    */
-  const double get_x();
+  const double get_x() const;
 
   /*
    * NAME:          get_y
@@ -54,10 +54,9 @@ public:
    *   const double
    *     - The y coordinate.
    */
-  const double get_y();
+  const double get_y() const;
 
 private:
-
   /*
    * NAME:          x
    *

@@ -18,13 +18,13 @@ public:
    * DESCRIPTION:   Constructor for ACO_TSP class.
    *
    * PARAMETERS:
-   *   std::string file_name
+   *   const std::string file_name
    *     - Path to file that contains the TSP problem.
    *
    * RETURNS:
    *   N/A
    */
-  ACO_TSP( std::string );
+  ACO_TSP( const std::string );
 
   /*
    * NAME:          ~ACO_TSP
@@ -51,7 +51,20 @@ public:
    * RETURNS:
    *   N/A
    */
-  void print_cities();
+  void print_cities() const;
+
+  /*
+   * NAME:          solve
+   *
+   * DESCRIPTION:   Solve the TSP using ACO.
+   *
+   * PARAMETERS:
+   *   N/A
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void solve() const;
 
 private:
   /*
@@ -75,7 +88,7 @@ private:
    * DESCRIPTION:   Parse a given file and populate the cities vector.
    *
    * PARAMETERS:
-   *   std::string file_name
+   *   const std::string file_name
    *     - Path to file that contains the TSP problem formatted in rows
    *       representing cities. Each row has 3 columns. Column1 = city number,
    *       Column2 = X-coordinate, and Column3 = Y-coordinate.
@@ -83,7 +96,24 @@ private:
    * RETURNS:
    *   N/A
    */
-  void parse_problem_file( std::string );
+  void parse_problem_file( const std::string );
+
+  /*
+   * NAME:          distance
+   *
+   * DESCRIPTION:   Calculates the euclidean distance between two cities.
+   *
+   * PARAMETERS:
+   *   const City const *city_a
+   *     - Pointer to a city.
+   *   const City const *city_a
+   *     - Pointer to a city.
+   *
+   * RETURNS:
+   *   double
+   *     - The euclidean distance between the two cities.
+   */
+  const double distance( City const * const, City const * const ) const;
 };
 
 #endif // __ACO_TSP__
