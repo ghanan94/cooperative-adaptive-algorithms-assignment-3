@@ -19,6 +19,9 @@
 %      (row).
 %
 function [ new_population ] = survivor_selection( population )
+    % Remove infeasible solutions (fitness has NaN)
+    population = population( ~any( isnan( population ), 2 ), : );
+    
     % Sort population by fitness in descending order
     [ ~, sorted_indexes ] = sort( population( :, 4 ), 'descend' );
     fitness_sorted_population = population( sorted_indexes, : );

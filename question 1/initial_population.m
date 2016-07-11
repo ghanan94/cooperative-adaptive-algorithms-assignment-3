@@ -39,12 +39,22 @@ function [ initial_population ] = initial_population(...
     initial_population = zeros( num_initial_population, 4 );
 
     for i = 1:num_initial_population
-        Kp = ( max_Kp - min_Kp ) * rand() + min_Kp;
-        Ti = ( max_Ti - min_Ti ) * rand() + min_Ti;
-        Td = ( max_Td - min_Td ) * rand() + min_Td;
- 
-        solution = [ Kp Ti Td 0 ];
-        solution( 4 ) = fitness( solution );
+        % Make sure solution is allowed.
+        while 1
+            Kp = ( max_Kp - min_Kp ) * rand() + min_Kp;
+            Ti = ( max_Ti - min_Ti ) * rand() + min_Ti;
+            Td = ( max_Td - min_Td ) * rand() + min_Td;
+
+            solution = [ Kp Ti Td 0 ];
+            solution( 4 ) = fitness( solution );
+
+            % Make sure none of the initial solutions have a NaN fitness
+            % If they have a NaN fitness, that means the solution is not
+            % possible/feasible.
+            if ~isnan( solution ( 4 ) ) 
+                break;
+            end
+        end
 
         initial_population( i, : ) = solution;
     end

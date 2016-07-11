@@ -17,17 +17,24 @@
 %
 function [ selected_parents ] = parent_selection( population )
     sum_fitness = sum( population( :, 4 ) );
-    rand_value = rand();
+    [ ~, sorted_indexes ] = sort( population( :, 4 ), 'descend' );
+    fitness_sorted_population = population( sorted_indexes, : );
 
-    selected_parents_counter = 0;
     selected_parents = zeros( length(population), 4 );
 
     for i = 1:length( population )
-        if rand_value <= population( i, 4 ) / sum_fitness
-            selected_parents( selected_parents_counter + 1, : ) = population( i, : );
-        end
-    end
+        rand_sum = rand() * sum_fitness;
+        idx = length(population);
 
-    selected_parents = selected_parents( 1:selected_parents_counter, : );
+        for j = 1:length( population )
+            rand_sum = rand_sum - fitness_sorted_population( j, 4 );
+
+            if rand_sum <= 0
+                idx = j;
+            end
+        end
+
+        selected_parents( i, : ) = fitness_sorted_population( idx, : );
+    end
 end
 

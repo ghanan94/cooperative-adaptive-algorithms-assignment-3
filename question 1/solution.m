@@ -59,16 +59,25 @@ function [ solution ] = solution(...
 
     % Best solution so far so be the solution with the best fitness so far
     best_solution = population( fI, : );
+    fprintf( 'Initial best solution was %d\n', best_solution(4) );
 
     for generation = 1:generations
         % Get list of all parents that will have offspring
         selected_parents = parent_selection( population );
-   
+
         % Crossover and mutate the parents to get new new pool
-        offspring = generate_offspring( selected_parents, crossover_probability, mutation_probability );
+        offspring = generate_offspring( selected_parents, crossover_probability, mutation_probability, min_Kp, max_Kp, min_Ti, max_Ti, min_Td, max_Td );
 
         % TODO: With new generation, update best_solution if required
         population = survivor_selection( [ population; offspring ] );
+
+        % Check if current best solution is better than global best 
+        % solution. If it is, update global best solution.
+        % fprintf( 'Test best solution was %d\n', population( 1, 4 ) );
+        if population( 1, 4 ) > best_solution( 4 )
+            fprintf( 'Old best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
+            best_solution = population( 1, : );
+        end
     end
 
     solution = best_solution(1:3);

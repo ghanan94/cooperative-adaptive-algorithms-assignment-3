@@ -14,6 +14,18 @@
 %    - Probability of solution parameters crossing over.
 %  mutation_probability (decimal)
 %    - Probability of solution parameters mutating.
+%  min_Kp (decimal)
+%    - Min value for Kp, not-inclusive.
+%  max Kp (decimal)
+%    - Max value for Kp, not-inclusive.
+%  min_Ti (decimal)
+%    - Min value for Ti, not-inclusive.
+%  max Ti (decimal)
+%    - Max value for Ti, not-inclusive.
+%  min_Td (decimal)
+%    - Min value for Td, not-inclusive.
+%  max Td (decimal)
+%    - Max value for Td, not-inclusive.
 %
 % RETURNS:
 %   children (Matrix: (Array of (Array: [Kp Ti Td])))
@@ -22,7 +34,17 @@
 %      Col2 represents Ti, Col3 represents Td, and Col4 is the fitness of
 %      the solution (row).
 %
-function [ offspring ] = generate_offspring( parents, crossover_probability, mutation_probability )
+function [ offspring ] = generate_offspring( ...
+    parents, ...
+    crossover_probability, ...
+    mutation_probability, ...
+    min_Kp, ...
+    max_Kp, ...
+    min_Ti, ...
+    max_Ti, ...
+    min_Td, ...
+    max_Td ...
+)
     offspring = parents;
 
     for i = 1:2:( length( parents ) - 1 )
@@ -61,11 +83,11 @@ function [ offspring ] = generate_offspring( parents, crossover_probability, mut
                         error('Unexpected j value');
                 end
             end
-            
-            % Calculate new fitness
-            offspring( i, 4 ) = fitness( offspring( 1, : ) );
-            offspring( i + 1, 4 ) = fitness( offspring( i, : ) );
         end
+
+        % Calculate new fitness
+        offspring( i, 4 ) = fitness( offspring( i, : ) );
+        offspring( i + 1, 4 ) = fitness( offspring( i + 1, : ) ); 
     end
 end
 
