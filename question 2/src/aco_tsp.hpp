@@ -218,6 +218,36 @@ private:
    *   N/A
    */
   void set_pheromone_value( std::vector<std::vector<double>> &,  unsigned int const, unsigned int const, double const ) const;
+
+  /*
+   * NAME:          print_solution
+   *
+   * DESCRIPTION:   Print solution.
+   *
+   * PARAMETERS:
+   *   std::vector<unsigned int> const &solution
+   *     - Reference to solution.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void print_solution( std::vector<unsigned int> const & ) const;
+
+  /*
+   * NAME:          evaporate_pheromone_trails
+   *
+   * DESCRIPTION:   Evaporate pheromone trails.
+   *
+   * PARAMETERS:
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to a pheromone table
+   *   double const pheromone_persistance
+   *     - Pheromone persistance.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void evaporate_pheromone_trails( std::vector<std::vector<double>> &, double const ) const;
 };
 
 #endif // __ACO_TSP__

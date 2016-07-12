@@ -28,13 +28,13 @@ bool ACO_TSP::Agent::check_if_visited( unsigned int const city_id ) const
 void ACO_TSP::Agent::reset_visited_cities( unsigned int const city_id )
 {
   // Update city agent is currently at.
-  this->at_city = city_id;
+  //this->at_city = city_id;
 
   // Clear history and add city.
   this->visited_cities.clear();
-  this->visited_cities.insert( city_id );
+  this->visited_cities.insert( this->at_city );
   this->visited_city_history.clear();
-  this->visited_city_history.push_back( city_id );
+  this->visited_city_history.push_back( this->at_city );
 }
 
 std::vector<unsigned int> const & ACO_TSP::Agent::get_visited_city_history() const
