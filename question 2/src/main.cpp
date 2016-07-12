@@ -8,7 +8,7 @@ int main( int argc, char *argv[] )
 
   ACO_TSP aco_tsp( "problems/p1.txt" );
   //aco_tsp.print_cities();
-  aco_tsp.solve( 100, 0.85 );
+  aco_tsp.solve( 100, 500, 0.95 );
 
   return 0;
 }

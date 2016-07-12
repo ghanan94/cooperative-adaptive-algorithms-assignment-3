@@ -29,8 +29,12 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve( unsigned int const population_size, double const pheromone_persistance ) const
+void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance ) const
 {
+  // Actual soln from http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/bays29.opt.tour
+  std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20};
+  printf( "Optimal solution cost = %f\n", this->cost( temp ) );
+
   std::vector<ACO_TSP::Agent> agents;
   std::vector<std::vector<double>> pheromone_trails;
   double best_cost = std::numeric_limits<double>::max();
@@ -60,7 +64,7 @@ void ACO_TSP::solve( unsigned int const population_size, double const pheromone_
   }
 
   // Do this only for 100 iterations.
-  for ( int iteration = 0; iteration < 500; ++iteration )
+  for ( int iteration = 0; iteration < max_iterations; ++iteration )
   {
     double temp_cost = std::numeric_limits<double>::max();
     std::vector<unsigned int> temp_solution;
@@ -101,7 +105,7 @@ void ACO_TSP::solve( unsigned int const population_size, double const pheromone_
     printf( "%d->", best_solution[ i ] );
   }
 
-  printf("\b\b  \n");
+  printf( "\b\b  \n" );
 }
 
 void ACO_TSP::parse_problem_file( std::string const file_name )

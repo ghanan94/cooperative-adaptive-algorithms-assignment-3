@@ -61,13 +61,15 @@ public:
    * PARAMETERS:
    *   unsigned int const population_size
    *     - Number of agents.
+   *   unsigned int const max_iterations
+   *     - Max iterations.
    *   double const pheromone_persistance
    *     - Pheromone persistance.
    *
    * RETURNS:
    *   N/A
    */
-  void solve( unsigned int const, double const ) const;
+  void solve( unsigned int const, unsigned int const, double const ) const;
 
 private:
   /*
