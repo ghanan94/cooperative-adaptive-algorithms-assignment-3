@@ -1,35 +1,38 @@
 #include "aco_tsp_agent.hpp"
 
-ACO_TSP::Agent::Agent( ACO_TSP::City const * const city )
+ACO_TSP::Agent::Agent( unsigned int const city_id )
 {
-  at_city = ( City * ) city;
+  this->set_at_city( city_id );
 }
 
-void ACO_TSP::Agent::set_at_city( ACO_TSP::City const * const city )
+void ACO_TSP::Agent::set_at_city( unsigned int const city_id )
 {
   // Update city agent is currently at.
-  this->at_city = ( City * ) city;
+  this->at_city = city_id;
 
   // At new city to the history of visited cities.
-  this->visited_cities.insert( ( City * ) city );
+  this->visited_cities.insert( city_id );
+  this->visited_city_history.push_back( city_id );
 }
 
-ACO_TSP::City * ACO_TSP::Agent::get_at_city() const
+unsigned int ACO_TSP::Agent::get_at_city() const
 {
   return this->at_city;
 }
 
-bool ACO_TSP::Agent::check_if_visited( ACO_TSP::City const * const city ) const
+bool ACO_TSP::Agent::check_if_visited( unsigned int const city_id ) const
 {
-  return this->visited_cities.find( ( City * ) city ) != this->visited_cities.end();
+  return this->visited_cities.find( city_id ) != this->visited_cities.end();
 }
 
-void ACO_TSP::Agent::reset_visited_cities( ACO_TSP::City const * const city )
+void ACO_TSP::Agent::reset_visited_cities( unsigned int const city_id )
 {
   // Update city agent is currently at.
-  this->at_city = ( City * ) city;
+  this->at_city = city_id;
 
   // Clear history and add city.
   this->visited_cities.clear();
-  this->visited_cities.insert( ( City * ) city );
+  this->visited_cities.insert( city_id );
+  this->visited_city_history.clear();
+  this->visited_city_history.push_back( city_id );
 }

@@ -3,7 +3,7 @@
 
 int main( int argc, char *argv[] )
 {
-  std::srand( time( NULL ) );
+  srand( time( NULL ) );
   printf( "ACO - TSP\n" );
 
   ACO_TSP aco_tsp( "problems/p1.txt" );

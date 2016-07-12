@@ -19,13 +19,13 @@ public:
    * DESCRIPTION:   Constructor for Agent class.
    *
    * PARAMETERS:
-   *   ACO_TSP::City const * const city
-   *     - Pointer to a city.
+   *   unsigned int const city_id
+   *     - City id.
    *
    * RETURNS:
    *   N/A
    */
-  Agent( ACO_TSP::City const * const );
+  Agent( unsigned int const );
 
   /*
    * NAME:          set_at_city
@@ -33,13 +33,13 @@ public:
    * DESCRIPTION:   Update the city agent is currently at.
    *
    * PARAMETERS:
-   *   ACO_TSP::City const * const city
-   *     - Pointer to a city.
+   *   unsigned int const city_id
+   *     - City id.
    *
    * RETURNS:
    *   N/A
    */
-  void set_at_city( ACO_TSP::City const * const );
+  void set_at_city( unsigned int const );
 
   /*
    * NAME:          get_at_city
@@ -50,10 +50,10 @@ public:
    *   N/A
    *
    * RETURNS:
-   *   ACO_TSP::City *
-   *     - Pointer to a city.
+   *   unsigned int
+   *     - City id.
    */
-  ACO_TSP::City * get_at_city() const;
+  unsigned int get_at_city() const;
 
   /*
    * NAME:          check_if_visited
@@ -61,14 +61,14 @@ public:
    * DESCRIPTION:   Check if a city has been visited by agent.
    *
    * PARAMETERS:
-   *   ACO_TSP::City const * const
-   *     - Pointer to a city
+   *   unsigned int const city_id
+   *     - City id.
    *
    * RETURNS:
    *   bool
    *     - returns True if visited; False otherwise.
    */
-  bool check_if_visited( ACO_TSP::City const * const ) const;
+  bool check_if_visited( unsigned int const ) const;
 
   /*
    * NAME:          reset_visited_cities
@@ -78,31 +78,42 @@ public:
    *                city.
    *
    * PARAMETERS:
-   *   ACO_TSP::City const * const city
-   *     - Pointer to a city.
+   *   unsigned int const city_id
+   *     - City id.
    *
    * RETURNS:
    *   N/A
    */
-  void reset_visited_cities( ACO_TSP::City const * const );
-  
+  void reset_visited_cities( unsigned int const );
+
 private:
   /*
    * NAME:          at_city
    *
-   * DESCRIPTION:   Pointer to the city agent is currently at.
+   * DESCRIPTION:   City id agent is currently at.
    *
    */
-  ACO_TSP::City *at_city;
+  unsigned int at_city;
 
   /*
    * NAME:          visited_cities
    *
    * DESCRIPTION:   An unordered_set to keep track of what cities the agent
-   *                has already visited.
+   *                has already visited. Used only to check if visited.
    *
    */
-  std::unordered_set<ACO_TSP::City *> visited_cities;
+  std::unordered_set<unsigned int> visited_cities;
+
+  /*
+   * NAME:          visited_city_history
+   *
+   * DESCRIPTION:   A vector to keep track of what cities were visited in order.
+   *                The difference between this and <visited_cities> is that
+   *                <visited_cities> is used to check if visited, and this is
+   *                used to show exact travel history.
+   *
+   */
+  std::vector<unsigned int> visited_city_history;
 };
 
 #endif // __ACO_TSP_AGENT__

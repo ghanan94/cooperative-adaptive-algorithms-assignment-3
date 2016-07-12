@@ -113,18 +113,52 @@ private:
    * DESCRIPTION:   Calculates the euclidean distance between two cities.
    *
    * PARAMETERS:
-   *   const City const *city_a
-   *     - Pointer to a city.
-   *   const City const *city_a
-   *     - Pointer to a city.
+   *   unsigned int const city_a_id
+   *     - City id.
+   *   unsigned int const city_b_id
+   *     - City id.
    *
    * RETURNS:
    *   double
    *     - The euclidean distance between the two cities.
    */
-  double distance( City const * const, City const * const ) const;
+  double distance( unsigned int const, unsigned int const ) const;
 
-  double get_pheromone_value( std::vector<std::vector<double>> &, unsigned int const, unsigned int const );
+  /*
+   * NAME:          get_pheromone_value
+   *
+   * DESCRIPTION:   Calculates the euclidean distance between two cities.
+   *
+   * PARAMETERS:
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to a pheromone table
+   *   unsigned int const i
+   *     - A city id.
+   *   unsigned int const j
+   *     - A city id.
+   *
+   * RETURNS:
+   *   double
+   *     - The pheromone value between two cities.
+   */
+  double get_pheromone_value( std::vector<std::vector<double>> &, unsigned int const, unsigned int const ) const;
+
+  /*
+   * NAME:          iterate
+   *
+   * DESCRIPTION:   Complete one iteration of the algorithm. Each ant will
+   *                traverse the graph.
+   *
+   * PARAMETERS:
+   *   std::vector<ACO_TSP::Agent> &agents
+   *     - Reference to agents.
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to pheromone table.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void iterate( std::vector<ACO_TSP::Agent> &, std::vector<std::vector<double>> & ) const;
 };
 
 #endif // __ACO_TSP__

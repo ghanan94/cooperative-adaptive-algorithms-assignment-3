@@ -7,14 +7,14 @@
 
 ACO_TSP::ACO_TSP( std::string const file_name )
 {
-  parse_problem_file( file_name );
+  this->parse_problem_file( file_name );
 }
 
 ACO_TSP::~ACO_TSP()
 {
   for( int i = 0; i < cities.size(); ++i )
   {
-    delete cities[i];
+    delete this->cities[i];
   }
 }
 
@@ -22,9 +22,9 @@ void ACO_TSP::print_cities() const
 {
   printf( "Cities: \n" );
 
-  for( int i = 0; i < cities.size(); ++i )
+  for( int i = 0; i < this->cities.size(); ++i )
   {
-    printf( "City #%02d @ ( %06.1f, %06.1f )\n", i, cities[ i ]->get_x(), cities[ i ]->get_y() );
+    printf( "City #%02d @ ( %06.1f, %06.1f )\n", i, this->cities[ i ]->get_x(), this->cities[ i ]->get_y() );
   }
 }
 
@@ -33,12 +33,12 @@ void ACO_TSP::solve( unsigned int const population_size ) const
   std::vector<ACO_TSP::Agent> agents;
   std::vector<std::vector<double>> pheromone_trails;
 
-  unsigned int const num_cities = cities.size();
+  unsigned int const num_cities = this->cities.size();
 
   // Create agents and assign each to a city.
   for ( int i = 0; i < population_size; ++i )
   {
-    ACO_TSP::Agent agent( cities[ i % num_cities ] );
+    ACO_TSP::Agent agent( i % num_cities );
 
     agents.push_back( agent );
   }
@@ -50,31 +50,16 @@ void ACO_TSP::solve( unsigned int const population_size ) const
 
     for ( int j = i + 1; j < num_cities; ++j )
     {
-      pheromone_trails_from_city_i.push_back(1);
+      pheromone_trails_from_city_i.push_back( 1 );
     }
 
     pheromone_trails.push_back( pheromone_trails_from_city_i );
   }
 
   // Do this only for 100 iterations.
-  for ( int iteration = 0; iteration < 100; ++iteration )
+  //for ( int iteration = 0; iteration < 100; ++iteration )
   {
-    // Loop through each agent.
-    for ( int a = 0; a < population_size; ++a )
-    {
-      // Check all possible cities to visit from current city.
-      std::vector<ACO_TSP::City *> vistable_cities;
-
-      for ( int c = 0; c < num_cities; ++c )
-      {
-        if ( !agents[ a ].check_if_visited( cities[ c ] ) )
-        {
-          vistable_cities.push_back( cities[ c ] );
-        }
-      }
-
-      // Determine which city this agent should progress to.
-    }
+    this->iterate( agents, pheromone_trails );
   }
 }
 
@@ -108,7 +93,7 @@ void ACO_TSP::parse_problem_file( std::string const file_name )
       y = std::stoi(data);
 
       ACO_TSP::City *city = new ACO_TSP::City( x, y );
-      cities.push_back( city );
+      this->cities.push_back( city );
     }
 
     problem_file.close();
@@ -122,12 +107,76 @@ void ACO_TSP::parse_problem_file( std::string const file_name )
  * Euclidean distance is calculated between two points ( x1, y1 ) and ( x2, y2 )
  * as sqrt( ( ( x2 - x1 ) ^ 2 ) + ( ( y2 - y1 ) ^ 2 ) ).
  */
-double ACO_TSP::distance( ACO_TSP::City const * const city_a, ACO_TSP::City const * const city_b ) const
+double ACO_TSP::distance( unsigned int const city_a_id, unsigned int const city_b_id ) const
 {
-  return sqrt( pow( city_b->get_x() - city_a->get_x(), 2.0 ) + pow( city_b->get_y() - city_a->get_y(), 2.0 ) );
+  return sqrt( pow( this->cities[ city_b_id ]->get_x() - this->cities[ city_a_id ]->get_x(), 2.0 ) + pow( this->cities[ city_b_id ]->get_y() - this->cities[ city_a_id ]->get_y(), 2.0 ) );
 }
 
-double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> &pheromone_table, unsigned int const i, unsigned int const j )
+double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> &pheromone_table, unsigned int const i, unsigned int const j ) const
 {
+  if (i == j)
+  {
+    printf("ERROR\n");
+  }
 
+  if ( i > j )
+  {
+    return pheromone_table[ j ][ i - j - 1 ];
+  }
+  else
+  {
+    return pheromone_table[ i ][ j - i - 1 ];
+  }
+}
+
+void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails ) const
+{
+  unsigned int num_cities = this->cities.size();
+  unsigned int population_size = agents.size();
+
+  for( int step = 1; step < num_cities; ++step )
+  {
+    // Loop through each agent.
+    for ( int a = 0; a < population_size; ++a )
+    {
+      // Check all possible cities to visit from current city.
+      std::vector<unsigned int> vistable_cities;
+      std::vector<double> values;
+      unsigned int selected_city = -1;
+
+      double some_variable = 0;
+
+      for ( int c = 0; c < num_cities; ++c )
+      {
+        if ( !agents[ a ].check_if_visited( c ) )
+        {
+          vistable_cities.push_back( c );
+          values.push_back( this->get_pheromone_value( pheromone_trails, agents[ a ].get_at_city(), c ) / this->distance( agents[ a ].get_at_city(), c ) );
+          some_variable += values.back();
+        }
+      }
+
+      // Determine which city this agent should progress to.
+      double random_value = ( ( double ) rand() / RAND_MAX ) * some_variable;
+
+      for ( int c = 0; c < vistable_cities.size(); ++c )
+      {
+        random_value -= values[ c ] / some_variable;
+
+        if ( random_value <= 0 )
+        {
+          // This city is selected.
+          selected_city = vistable_cities[ c ];
+        }
+      }
+
+      if ( selected_city == -1 )
+      {
+        printf("-1 %d %d\n", a, step);
+        selected_city = vistable_cities.back();
+      }
+
+      agents[ a ].set_at_city( selected_city );
+    }
+  }
 }
