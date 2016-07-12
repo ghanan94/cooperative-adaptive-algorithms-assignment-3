@@ -32,7 +32,11 @@
 *.exe
 *.out
 *.app
-Status API Training Shop Blog About
+
+
+# Debug files
+*.dSYM/
+*.su
 
 ##-------------------MATLAB--------------------------
 

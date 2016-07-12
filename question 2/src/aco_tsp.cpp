@@ -29,7 +29,7 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance ) const
+void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance, double const alpha, double const beta ) const
 {
   // Actual soln from http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/bays29.opt.tour
   std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20};
@@ -69,7 +69,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
     double temp_cost = std::numeric_limits<double>::max();
     std::vector<unsigned int> temp_solution;
 
-    this->iterate( agents, pheromone_trails, pheromone_persistance );
+    this->iterate( agents, pheromone_trails, pheromone_persistance, alpha, beta );
 
     this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
 
@@ -170,7 +170,7 @@ double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> const &phe
   }
 }
 
-void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance ) const
+void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance, double const alpha, double const beta ) const
 {
   // Loop through each agent and get next city that agent should go to
   // Set the agent's new location to the selected nect city.
@@ -178,7 +178,7 @@ void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vec
   {
     for( int step = 1; step < this->cities.size(); ++step )
     {
-      unsigned int selected_city = this->next_city( agents[ a ], pheromone_trails, pheromone_persistance );
+      unsigned int selected_city = this->next_city( agents[ a ], pheromone_trails, pheromone_persistance, alpha, beta );
 
       agents[ a ].set_at_city( selected_city );
     }
@@ -255,7 +255,7 @@ void ACO_TSP::evaporate_pheromone_trails( std::vector<std::vector<double>> &pher
   }
 }
 
-unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance ) const
+unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance, double const alpha, double const beta ) const
 {
   // Check all possible cities to visit from agent's current city.
   std::vector<unsigned int> vistable_cities;
@@ -269,19 +269,18 @@ unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<
     if ( !agent.check_if_visited( c ) )
     {
       vistable_cities.push_back( c );
-      values.push_back( this->get_pheromone_value( pheromone_trails, agent.get_at_city(), c ) / this->distance( agent.get_at_city(), c ) );
-      //printf("SomeVariable: %f, %f\n", some_variable, values.back());
+      values.push_back( pow( this->get_pheromone_value( pheromone_trails, agent.get_at_city(), c ), alpha ) / pow( this->distance( agent.get_at_city(), c ), beta ) );
       some_variable += values.back();
 
     }
   }
 
   // Determine which city this agent should progress to.
-  double random_value = ( double ) rand() / RAND_MAX ;
+  double random_value = ( ( double ) rand() / RAND_MAX ) * some_variable;
 
   for ( int c = 0; c < vistable_cities.size(); ++c )
   {
-    random_value -= values[ c ] / some_variable;
+    random_value -= values[ c ];
 
     if ( random_value <= 0 )
     {
@@ -301,7 +300,7 @@ unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<
 
 void ACO_TSP::print_pheromone_table( std::vector<std::vector<double>> const &pheromone_table ) const
 {
-  printf("Pheromone Table:");
+  printf( "Pheromone Table:\n" );
 
   for ( int i = 0; i < pheromone_table.size(); ++i )
   {
@@ -315,6 +314,6 @@ void ACO_TSP::print_pheromone_table( std::vector<std::vector<double>> const &phe
       printf( "(%8.5f) ", pheromone_table[ i ][ j ] );
     }
 
-    printf("\n");
+    printf( "\n" );
   }
 }

@@ -65,11 +65,17 @@ public:
    *     - Max iterations.
    *   double const pheromone_persistance
    *     - Pheromone persistance.
+   *   double const alpha
+   *     - How much the phermone value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
+   *   double const beta
+   *     - How much the distance value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
    *
    * RETURNS:
    *   N/A
    */
-  void solve( unsigned int const, unsigned int const, double const ) const;
+  void solve( unsigned int const, unsigned int const, double const, double const, double const ) const;
 
 private:
   /*
@@ -160,11 +166,17 @@ private:
    *     - Reference to pheromone table.
    *   double const pheromone_persistance
    *     - Pheromone persistance.
+   *   double const alpha
+   *     - How much the phermone value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
+   *   double const beta
+   *     - How much the distance value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
    *
    * RETURNS:
    *   N/A
    */
-  void iterate( std::vector<ACO_TSP::Agent> &, std::vector<std::vector<double>> &, double const ) const;
+  void iterate( std::vector<ACO_TSP::Agent> &, std::vector<std::vector<double>> &, double const, double const, double const ) const;
 
   /*
    * NAME:          cost
@@ -259,11 +271,17 @@ private:
    *     - Reference to pheromone table.
    *   double const pheromone_persistance
    *     - Pheromone persistance.
+   *   double const alpha
+   *     - How much the phermone value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
+   *   double const beta
+   *     - How much the distance value matters for the probability of transition
+   *       pij = Tij^alpha * (1/dij)^beta.
    *
    * RETURNS:
    *   N/A
    */
-  unsigned int next_city( ACO_TSP::Agent &, std::vector<std::vector<double>> &, double const ) const;
+  unsigned int next_city( ACO_TSP::Agent &, std::vector<std::vector<double>> &, double const, double const, double const ) const;
 
   /*
    * NAME:          print_pheromone_table
