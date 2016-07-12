@@ -32,7 +32,7 @@ void ACO_TSP::print_cities() const
 void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance ) const
 {
   // Actual soln from http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/bays29.opt.tour
-  std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20,0};
+  std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20};
   printf( "Optimal solution:\n" );
   this->print_solution( actual_solution );
 
@@ -71,7 +71,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
     this->iterate( agents, pheromone_trails, pheromone_persistance );
 
-    //this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
+    this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
 
     // Find agent with best cost so far and reset agents
     for ( int i = 0; i < population_size; ++i )
@@ -82,18 +82,21 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
       {
         temp_cost = cost;
         temp_solution = agents[ i ].get_visited_city_history();
-
-        if ( cost < best_cost )
-        {
-          printf( "Previous best_cost = %f, New = %f\n", best_cost, cost );
-          best_cost = cost;
-          best_solution = agents[ i ].get_visited_city_history();
-        }
       }
 
-      //this->update_pheromone_values( pheromone_trails, agents[ i ].get_visited_city_history() , pheromone_persistance );
+      this->update_pheromone_values( pheromone_trails, agents[ i ].get_visited_city_history() );
 
       agents[ i ].reset_visited_cities( i % num_cities );
+    }
+
+    this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
+    //this->print_pheromone_table( pheromone_trails );
+
+    if ( temp_cost < best_cost )
+    {
+      printf( "Previous best_cost = %f, New = %f\n", best_cost, temp_cost );
+      best_cost = temp_cost;
+      best_solution = temp_solution;
     }
   }
 
@@ -169,61 +172,16 @@ double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> const &phe
 
 void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance ) const
 {
-  unsigned int num_cities = this->cities.size();
-  unsigned int population_size = agents.size();
-
-  for( int step = 1; step < num_cities; ++step )
+  // Loop through each agent and get next city that agent should go to
+  // Set the agent's new location to the selected nect city.
+  for ( int a = 0; a < agents.size(); ++a )
   {
-    // Loop through each agent.
-    for ( int a = 0; a < population_size; ++a )
+    for( int step = 1; step < this->cities.size(); ++step )
     {
-      // Check all possible cities to visit from current city.
-      std::vector<unsigned int> vistable_cities;
-      std::vector<double> values;
-      unsigned int selected_city = -1;
-
-      double some_variable = 0;
-
-      for ( int c = 0; c < num_cities; ++c )
-      {
-        if ( !agents[ a ].check_if_visited( c ) )
-        {
-          vistable_cities.push_back( c );
-          values.push_back( this->get_pheromone_value( pheromone_trails, agents[ a ].get_at_city(), c ) / this->distance( agents[ a ].get_at_city(), c ) );
-          some_variable += values.back();
-        }
-      }
-
-      // Determine which city this agent should progress to.
-      double random_value = ( ( double ) rand() / RAND_MAX ) * some_variable;
-
-      for ( int c = 0; c < vistable_cities.size(); ++c )
-      {
-        random_value -= values[ c ] / some_variable;
-
-        if ( random_value <= 0 )
-        {
-          // This city is selected.
-          selected_city = vistable_cities[ c ];
-          break;
-        }
-      }
-
-      if ( selected_city == -1 )
-      {
-        printf("-1 %d %d\n", a, step);
-        selected_city = vistable_cities.back();
-      }
+      unsigned int selected_city = this->next_city( agents[ a ], pheromone_trails, pheromone_persistance );
 
       agents[ a ].set_at_city( selected_city );
     }
-  }
-
-  // Closed loop
-  for ( int a = 0; a < population_size; ++a )
-  {
-    std::vector<unsigned int> const &history = agents[ a ].get_visited_city_history();
-    agents[ a ].set_at_city(  history.front() );
   }
 }
 
@@ -236,18 +194,24 @@ double ACO_TSP::cost( std::vector<unsigned int> const &solution ) const
     cost += distance( solution[ i - 1 ], solution[ i ] );
   }
 
+  // Closed loop
+  cost += distance( solution.back(), solution.front() );
+
   return cost;
 }
 
-void ACO_TSP::update_pheromone_values( std::vector<std::vector<double>> &pheromone_table, std::vector<unsigned int> const &solution, double const pheromone_persistance ) const
+void ACO_TSP::update_pheromone_values( std::vector<std::vector<double>> &pheromone_table, std::vector<unsigned int> const &solution ) const
 {
   double cost = this->cost( solution );
 
   for ( int i = 1; i < solution.size(); ++i )
   {
-    double new_pheromone_value = this->get_pheromone_value( pheromone_table, solution[ i - 1 ], solution[ i ] ) + ( distance( solution[ i - 1 ], solution[ i ] ) / cost );
+    double new_pheromone_value = this->get_pheromone_value( pheromone_table, solution[ i - 1 ], solution[ i ] ) + ( 1 / cost );
     this->set_pheromone_value( pheromone_table, solution[ i - 1 ], solution[ i ], new_pheromone_value );
   }
+
+  double new_pheromone_value = this->get_pheromone_value( pheromone_table, solution.back(), solution.front() ) + ( 1 / cost );
+  this->set_pheromone_value( pheromone_table, solution.back(), solution.front(), new_pheromone_value );
 }
 
 void ACO_TSP::set_pheromone_value( std::vector<std::vector<double>> &pheromone_table, unsigned int const i, unsigned int const j, double const value ) const
@@ -288,5 +252,69 @@ void ACO_TSP::evaporate_pheromone_trails( std::vector<std::vector<double>> &pher
     {
       pheromone_table[ i ][ j ] *= pheromone_persistance;
     }
+  }
+}
+
+unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance ) const
+{
+  // Check all possible cities to visit from agent's current city.
+  std::vector<unsigned int> vistable_cities;
+  std::vector<double> values;
+  unsigned int selected_city = -1;
+
+  double some_variable = 0;
+
+  for ( int c = 0; c < this->cities.size(); ++c )
+  {
+    if ( !agent.check_if_visited( c ) )
+    {
+      vistable_cities.push_back( c );
+      values.push_back( this->get_pheromone_value( pheromone_trails, agent.get_at_city(), c ) / this->distance( agent.get_at_city(), c ) );
+      //printf("SomeVariable: %f, %f\n", some_variable, values.back());
+      some_variable += values.back();
+
+    }
+  }
+
+  // Determine which city this agent should progress to.
+  double random_value = ( double ) rand() / RAND_MAX ;
+
+  for ( int c = 0; c < vistable_cities.size(); ++c )
+  {
+    random_value -= values[ c ] / some_variable;
+
+    if ( random_value <= 0 )
+    {
+      // This city is selected.
+      selected_city = vistable_cities[ c ];
+      break;
+    }
+  }
+
+  if ( selected_city == -1 )
+  {
+    selected_city = vistable_cities.back();
+  }
+
+  return selected_city;
+}
+
+void ACO_TSP::print_pheromone_table( std::vector<std::vector<double>> const &pheromone_table ) const
+{
+  printf("Pheromone Table:");
+
+  for ( int i = 0; i < pheromone_table.size(); ++i )
+  {
+    for ( int j = 0; j <= i; ++j )
+    {
+      printf( "(%8.5f) ", 0.0 );
+    }
+
+    for ( int j = 0; j < pheromone_table[ i ].size(); ++j )
+    {
+      printf( "(%8.5f) ", pheromone_table[ i ][ j ] );
+    }
+
+    printf("\n");
   }
 }

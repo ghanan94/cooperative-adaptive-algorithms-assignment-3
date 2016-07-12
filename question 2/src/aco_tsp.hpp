@@ -191,13 +191,11 @@ private:
    *     - Reference to a pheromone table
    *   std::vector<unsigned int> const &
    *     - Refernce to a solution path.
-   *   double const pheromone_persistance
-   *     - Pheromone persistance.
    *
    * RETURNS:
    *   N/A
    */
-  void update_pheromone_values( std::vector<std::vector<double>> &, std::vector<unsigned int> const &, double const ) const;
+  void update_pheromone_values( std::vector<std::vector<double>> &, std::vector<unsigned int> const & ) const;
 
   /*
    * NAME:          set_pheromone_value
@@ -248,6 +246,38 @@ private:
    *   N/A
    */
   void evaporate_pheromone_trails( std::vector<std::vector<double>> &, double const ) const;
+
+  /*
+   * NAME:          next_city
+   *
+   * DESCRIPTION:   Gets next city for an agent.
+   *
+   * PARAMETERS:
+   *   ACO_TSP::Agent &agents
+   *     - Reference to an agent.
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to pheromone table.
+   *   double const pheromone_persistance
+   *     - Pheromone persistance.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  unsigned int next_city( ACO_TSP::Agent &, std::vector<std::vector<double>> &, double const ) const;
+
+  /*
+   * NAME:          print_pheromone_table
+   *
+   * DESCRIPTION:   Print print_pheromone_table.
+   *
+   * PARAMETERS:
+   *   std::vector<std::vector<double>> const &pheromone_table
+   *     - Reference to a pheromone table.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void print_pheromone_table( std::vector<std::vector<double>> const & ) const;
 };
 
 #endif // __ACO_TSP__
