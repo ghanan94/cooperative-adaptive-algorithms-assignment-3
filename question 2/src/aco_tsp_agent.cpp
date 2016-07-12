@@ -36,3 +36,8 @@ void ACO_TSP::Agent::reset_visited_cities( unsigned int const city_id )
   this->visited_city_history.clear();
   this->visited_city_history.push_back( city_id );
 }
+
+std::vector<unsigned int> const & ACO_TSP::Agent::get_visited_city_history() const
+{
+  return this->visited_city_history;
+}

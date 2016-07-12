@@ -86,6 +86,20 @@ public:
    */
   void reset_visited_cities( unsigned int const );
 
+  /*
+   * NAME:          get_visited_city_history
+   *
+   * DESCRIPTION:   Get the history of cities agent traveled in an interation.
+   *
+   * PARAMETERS:
+   *   N/A
+   *
+   * RETURNS:
+   *   std::vector<unsigned int> &
+   *     - Reference to a history.
+   */
+  std::vector<unsigned int> const & get_visited_city_history() const;
+
 private:
   /*
    * NAME:          at_city

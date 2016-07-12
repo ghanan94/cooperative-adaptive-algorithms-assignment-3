@@ -61,11 +61,13 @@ public:
    * PARAMETERS:
    *   unsigned int const population_size
    *     - Number of agents.
+   *   double const pheromone_persistance
+   *     - Pheromone persistance.
    *
    * RETURNS:
    *   N/A
    */
-  void solve( unsigned int const ) const;
+  void solve( unsigned int const, double const ) const;
 
 private:
   /*
@@ -127,10 +129,10 @@ private:
   /*
    * NAME:          get_pheromone_value
    *
-   * DESCRIPTION:   Calculates the euclidean distance between two cities.
+   * DESCRIPTION:   Get the pheromone value between two cities.
    *
    * PARAMETERS:
-   *   std::vector<std::vector<double>> &pheromone_table
+   *   std::vector<std::vector<double>> const &pheromone_table
    *     - Reference to a pheromone table
    *   unsigned int const i
    *     - A city id.
@@ -141,7 +143,7 @@ private:
    *   double
    *     - The pheromone value between two cities.
    */
-  double get_pheromone_value( std::vector<std::vector<double>> &, unsigned int const, unsigned int const ) const;
+  double get_pheromone_value( std::vector<std::vector<double>> const &, unsigned int const, unsigned int const ) const;
 
   /*
    * NAME:          iterate
@@ -154,11 +156,66 @@ private:
    *     - Reference to agents.
    *   std::vector<std::vector<double>> &pheromone_table
    *     - Reference to pheromone table.
+   *   double const pheromone_persistance
+   *     - Pheromone persistance.
    *
    * RETURNS:
    *   N/A
    */
-  void iterate( std::vector<ACO_TSP::Agent> &, std::vector<std::vector<double>> & ) const;
+  void iterate( std::vector<ACO_TSP::Agent> &, std::vector<std::vector<double>> &, double const ) const;
+
+  /*
+   * NAME:          cost
+   *
+   * DESCRIPTION:   Calculate cost of a solution.
+   *
+   * PARAMETERS:
+   *   std::vector<unsigned int> const &solution
+   *     - Reference to a solution.
+   *
+   * RETURNS:
+   *   double
+   *     - Cost of a solution.
+   */
+  double cost( std::vector<unsigned int> const & ) const;
+
+  /*
+   * NAME:          update_pheromone_values
+   *
+   * DESCRIPTION:   Offline update phermone trail values given a solution path.
+   *
+   * PARAMETERS:
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to a pheromone table
+   *   std::vector<unsigned int> const &
+   *     - Refernce to a solution path.
+   *   double const pheromone_persistance
+   *     - Pheromone persistance.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void update_pheromone_values( std::vector<std::vector<double>> &, std::vector<unsigned int> const &, double const ) const;
+
+  /*
+   * NAME:          set_pheromone_value
+   *
+   * DESCRIPTION:   Set the pheromone value between two cities.
+   *
+   * PARAMETERS:
+   *   std::vector<std::vector<double>> &pheromone_table
+   *     - Reference to a pheromone table
+   *   unsigned int const i
+   *     - A city id.
+   *   unsigned int const j
+   *     - A city id.
+   *   double const value
+   *     - New value.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void set_pheromone_value( std::vector<std::vector<double>> &,  unsigned int const, unsigned int const, double const ) const;
 };
 
 #endif // __ACO_TSP__

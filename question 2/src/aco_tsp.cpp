@@ -4,6 +4,7 @@
 #include <sstream> // std::stringstream
 #include <cmath> // pow, sqrt
 #include "aco_tsp_agent.hpp" // ACO_TSP::Agent
+#include <limits> // std::numeric_limits
 
 ACO_TSP::ACO_TSP( std::string const file_name )
 {
@@ -28,10 +29,12 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve( unsigned int const population_size ) const
+void ACO_TSP::solve( unsigned int const population_size, double const pheromone_persistance ) const
 {
   std::vector<ACO_TSP::Agent> agents;
   std::vector<std::vector<double>> pheromone_trails;
+  double best_cost = std::numeric_limits<double>::max();
+  std::vector<unsigned int> best_solution;
 
   unsigned int const num_cities = this->cities.size();
 
@@ -57,10 +60,48 @@ void ACO_TSP::solve( unsigned int const population_size ) const
   }
 
   // Do this only for 100 iterations.
-  //for ( int iteration = 0; iteration < 100; ++iteration )
+  for ( int iteration = 0; iteration < 500; ++iteration )
   {
-    this->iterate( agents, pheromone_trails );
+    double temp_cost = std::numeric_limits<double>::max();
+    std::vector<unsigned int> temp_solution;
+
+    this->iterate( agents, pheromone_trails, pheromone_persistance );
+
+    // Find agent with best cost so far and reset agents
+    for ( int i = 0; i < population_size; ++i )
+    {
+      double cost = this->cost( agents[ i ].get_visited_city_history() );
+
+      if ( cost < temp_cost )
+      {
+        temp_cost = cost;
+        temp_solution = agents[ i ].get_visited_city_history();
+
+        if ( cost < best_cost )
+        {
+          printf( "Previous best_cost = %f, New = %f\n", best_cost, cost );
+          best_cost = cost;
+          best_solution = agents[ i ].get_visited_city_history();
+        }
+      }
+
+      agents[ i ].reset_visited_cities( i % num_cities );
+    }
+
+    // With best solution this iteration, update pheromone_trails
+    // Offline pheremone update
+    this->update_pheromone_values( pheromone_trails, temp_solution, pheromone_persistance );
   }
+
+  printf( "Best Cost: %f\n", best_cost );
+  printf( "Best Path: " );
+
+  for ( int i = 0; i < best_solution.size(); ++i )
+  {
+    printf( "%d->", best_solution[ i ] );
+  }
+
+  printf("\b\b  \n");
 }
 
 void ACO_TSP::parse_problem_file( std::string const file_name )
@@ -112,7 +153,7 @@ double ACO_TSP::distance( unsigned int const city_a_id, unsigned int const city_
   return sqrt( pow( this->cities[ city_b_id ]->get_x() - this->cities[ city_a_id ]->get_x(), 2.0 ) + pow( this->cities[ city_b_id ]->get_y() - this->cities[ city_a_id ]->get_y(), 2.0 ) );
 }
 
-double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> &pheromone_table, unsigned int const i, unsigned int const j ) const
+double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> const &pheromone_table, unsigned int const i, unsigned int const j ) const
 {
   if (i == j)
   {
@@ -129,7 +170,7 @@ double ACO_TSP::get_pheromone_value( std::vector<std::vector<double>> &pheromone
   }
 }
 
-void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails ) const
+void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vector<double>> &pheromone_trails, double const pheromone_persistance ) const
 {
   unsigned int num_cities = this->cities.size();
   unsigned int population_size = agents.size();
@@ -167,6 +208,7 @@ void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vec
         {
           // This city is selected.
           selected_city = vistable_cities[ c ];
+          break;
         }
       }
 
@@ -176,7 +218,58 @@ void ACO_TSP::iterate( std::vector<ACO_TSP::Agent> &agents, std::vector<std::vec
         selected_city = vistable_cities.back();
       }
 
+      // Evaporate the trail and add pheremone
+      // "Online step_by_step" pheremone update
+      double new_pheromone_value = ( this->get_pheromone_value( pheromone_trails, agents[ a ].get_at_city(), selected_city ) * pheromone_persistance ) + ( 1 / this->distance( agents[ a ].get_at_city(), selected_city ) );
+      this->set_pheromone_value( pheromone_trails, agents[ a ].get_at_city(), selected_city, new_pheromone_value );
+
       agents[ a ].set_at_city( selected_city );
     }
+  }
+}
+
+double ACO_TSP::cost( std::vector<unsigned int> const &solution ) const
+{
+  double cost = 0;
+
+  for ( int i = 1; i < solution.size(); ++i )
+  {
+    cost += distance( solution[ i - 1 ], solution[ i ] );
+  }
+
+  // We want a closed loop
+  cost += distance( solution.front(), solution.back() );
+
+  return cost;
+}
+
+void ACO_TSP::update_pheromone_values( std::vector<std::vector<double>> &pheromone_table, std::vector<unsigned int> const &solution, double const pheromone_persistance ) const
+{
+  double cost = this->cost( solution );
+
+  for ( int i = 1; i < solution.size(); ++i )
+  {
+    double new_pheromone_value = ( this->get_pheromone_value( pheromone_table, solution[ i - 1 ], solution[ i ] ) * pheromone_persistance ) + ( distance( solution[ i - 1 ], solution[ i ] ) / cost );
+    this->set_pheromone_value( pheromone_table, solution[ i - 1 ], solution[ i ], new_pheromone_value );
+  }
+
+  double new_pheromone_value = ( this->get_pheromone_value( pheromone_table, solution.front(), solution.back() ) * pheromone_persistance ) + ( distance( solution.front(), solution.back() ) / cost );
+  this->set_pheromone_value( pheromone_table, solution.front(), solution.back(), new_pheromone_value );
+}
+
+void ACO_TSP::set_pheromone_value( std::vector<std::vector<double>> &pheromone_table, unsigned int const i, unsigned int const j, double const value ) const
+{
+  if (i == j)
+  {
+    printf("ERROR\n");
+  }
+
+  if ( i > j )
+  {
+    pheromone_table[ j ][ i - j - 1 ] = value;
+  }
+  else
+  {
+    pheromone_table[ i ][ j - i - 1 ] = value;
   }
 }
