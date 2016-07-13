@@ -86,7 +86,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
       this->update_pheromone_values( pheromone_trails, agents[ i ].get_visited_city_history() );
 
-      agents[ i ].reset_visited_cities( i % num_cities );
+      agents[ i ].reset_visited_cities();
     }
 
     this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
@@ -271,7 +271,6 @@ unsigned int ACO_TSP::next_city( ACO_TSP::Agent &agent, std::vector<std::vector<
       vistable_cities.push_back( c );
       values.push_back( pow( this->get_pheromone_value( pheromone_trails, agent.get_at_city(), c ), alpha ) / pow( this->distance( agent.get_at_city(), c ), beta ) );
       some_variable += values.back();
-
     }
   }
 

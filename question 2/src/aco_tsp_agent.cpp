@@ -25,12 +25,9 @@ bool ACO_TSP::Agent::check_if_visited( unsigned int const city_id ) const
   return this->visited_cities.find( city_id ) != this->visited_cities.end();
 }
 
-void ACO_TSP::Agent::reset_visited_cities( unsigned int const city_id )
+void ACO_TSP::Agent::reset_visited_cities()
 {
-  // Update city agent is currently at.
-  //this->at_city = city_id;
-
-  // Clear history and add city.
+  // Reset history to start from current city..
   this->visited_cities.clear();
   this->visited_cities.insert( this->at_city );
   this->visited_city_history.clear();

@@ -73,18 +73,16 @@ public:
   /*
    * NAME:          reset_visited_cities
    *
-   * DESCRIPTION:   Reset the history of visited cities for this agent. Agent
-   *                must be at a city though, so update reset history with a
-   *                city.
+   * DESCRIPTION:   Reset the history of visited cities for this agent.
+   *                Agent should only have current city in history after reset.
    *
    * PARAMETERS:
-   *   unsigned int const city_id
-   *     - City id.
+   *   N/A
    *
    * RETURNS:
    *   N/A
    */
-  void reset_visited_cities( unsigned int const );
+  void reset_visited_cities();
 
   /*
    * NAME:          get_visited_city_history
