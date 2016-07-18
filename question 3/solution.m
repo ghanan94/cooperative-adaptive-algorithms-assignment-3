@@ -4,25 +4,36 @@
 % DESCRIPTION: Calculates the best set of parameters x, y for the equation 
 %              z = ( 4 - ( 2.1 * x ^ 2 ) + ( ( x ^ 4 ) / 3 ) ) ) * 
 %              ( x ^ 2 ) + ( x * y ) + ( ( 4 * y ^ 2 ) - 4 ) * ( y ^ 2 ).
+%              The best set of parameters is calculated using the Particle
+%              Swarm Optimization algorithm (PSO).
+%
 % PARAMETERS:
 %   population (int)
 %     - Number of agents.
-%
-% RETURNS:
-%   solution
-%     - Best x and y values in the format [ x y ].
-%   min_x
+%   min_x (double)
 %     - Min value for x.
-%   max_y
+%   max_y (double)
 %     - Max value for x.
-%   min_y
+%   min_y (double)
 %     - Min value for y.
-%   max_y
+%   max_y (double)
 %     - Max value for y.
-%   max_iterations
+%   w (double)
+%     - Inertia weight.
+%   c_1 (double)
+%     - Acceleration coefficient representing how much to trust own best
+%       solution so far.
+%   c_2 (double)
+%     - Acceleration coefficient representing how much to trust other
+%       agents' global best solution so far.
+%   max_iterations (int)
 %     - Max iterations.
 %
-function [ solution ] = solution( population, min_x, max_x, min_y, max_y, max_iterations )
+% RETURNS:
+%   solution [ x y ]
+%     - Best x and y values in the format [ x y ].
+%
+function [ solution ] = solution( population, min_x, max_x, min_y, max_y, w, c_1, c_2, max_iterations )
     % For the agents matrix: Each agent is represented by a row. Column1
     % will be the agent's current x value. Column2 will be the agent's
     % current y value. Column3 will be the agent's current valuation for z.
@@ -32,23 +43,16 @@ function [ solution ] = solution( population, min_x, max_x, min_y, max_y, max_it
     % Column6 is best position's x and Column7 is best position's y. 
     % Column8 is the best position's z value.
     
-    w = 0.792;
-    c_1 = 1.4944;
-    c_2 = 1.4944;
-    
     hold off;
     
     agents = initial_solution( population, min_x, max_x, min_y, max_y );
 
     scatter( agents( :, 1 ), agents( :, 2 ) );
-    hold off;
-    
-    [ ~, min_z_index ] = min( agents( :, 5 ) );
-    
-    solution = agents( min_z_index, 1:2 );
+    hold on;
     
     for iteration = 1:max_iterations
-        pause(0.1);
+        % Pause so we can see the scatter plot updating and the changes.
+        %pause(0.2);
         
         % Get global best position.
         [ ~, min_z_index ] = min( agents( :, 5 ) );
@@ -69,4 +73,8 @@ function [ solution ] = solution( population, min_x, max_x, min_y, max_y, max_it
         % Update scatter plot.
         scatter( agents( :, 1 ), agents( :, 2 ) );
     end
+    
+    % Get global best position.
+    [ ~, min_z_index ] = min( agents( :, 5 ) );
+    solution = agents( min_z_index, 1:2 );
 end

@@ -1,21 +1,28 @@
 %
 % NAME:        velocity
 %
-% DESCRIPTION: Calculates next velocity for agent.
+% DESCRIPTION: Calculates next velocity for agent. Neext velocity is
+%              calculated as: new_v = ( w * v ) + 
+%              ( c_1 * r_1 * ( personal_best - current_position ) ) +
+%              ( c_2 * r_2 * ( global_best - current_position ) ).
+%
 % PARAMETERS:
-%   w
-%     - Inertia.
-%   c_1
-%   c_2
-%   global_best_solution
-%     - Vector in format [ x y ] representing best global solution thus
+%   w (double)
+%     - Inertia weight.
+%   c_1 (double)
+%     - Acceleration coefficient representing how much to trust own best
+%       solution so far.
+%   c_2 (double)
+%     - Acceleration coefficient representing how much to trust other
+%       agents' global best solution so far.
+%   global_best_solution [ x y ]
+%     - Vector in format [ x y ] representing best global solution so
 %       far.
 %   agent
 %     - Vector(Matrix) representing agent(s).
-%   
 %
 % RETURNS:
-%   velocity
+%   velocity [ v_x v_y ]
 %     - Velocity represented as [ v_x v_y ].
 %
 function [ velocity ] = velocity( w, c_1, c_2, global_best_solution, agent )

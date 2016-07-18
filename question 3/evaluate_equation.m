@@ -5,13 +5,13 @@
 %              ( ( x ^ 4 ) / 3 ) ) ) * ( x ^ 2 ) + ( x * y ) + 
 %              ( ( 4 * y ^ 2 ) - 4 ) * ( y ^ 2 ).
 % PARAMETERS:
-%   x
+%   x (double)
 %     - x value(s).
-%   y
+%   y (double)
 %     - y value(s).
 %
 % RETURNS:
-%   z
+%   z (double)
 %     - z value(s).
 %
 function [ z ] = evaluate_equation( x, y )

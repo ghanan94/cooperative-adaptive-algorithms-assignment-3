@@ -1,18 +1,20 @@
 %
 % NAME:        initial_solution
 %
-% DESCRIPTION: Calculates the initial positions for agents.
+% DESCRIPTION: Calculates the initial positions for agents. Initial
+%              velocities is set to 0. Agents' personal best is set to
+%              their initial positions.
 %
 % PARAMETERS:
-%   population
+%   population (int)
 %     - Number of agents.
-%   min_x
+%   min_x (double)
 %     - Min value for x.
-%   max_y
+%   max_y (double)
 %     - Max value for x.
-%   min_y
+%   min_y (double)
 %     - Min value for y.
-%   max_y
+%   max_y (double)
 %     - Max value for y.
 %
 % RETURNS:

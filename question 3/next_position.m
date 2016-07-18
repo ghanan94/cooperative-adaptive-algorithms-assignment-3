@@ -6,17 +6,17 @@
 % PARAMETERS:
 %   agent
 %     - Vector(Matrix) representing agent(s).
-%   min_x
+%   min_x (double)
 %     - Min value for x.
-%   max_y
+%   max_y (double)
 %     - Max value for x.
-%   min_y
+%   min_y (double)
 %     - Min value for y.
-%   max_y
+%   max_y (double)
 %     - Max value for y.
 %
 % RETURNS:
-%   next_position
+%   next_position [ x y ]
 %     - Next position represented by [ x y ].
 %
 function [ next_position ] = next_position( agent, min_x, max_x, min_y, max_y )
