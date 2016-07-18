@@ -1,5 +1,5 @@
 %
-% NAME:        evaluate_equation
+% NAME:        velocity
 %
 % DESCRIPTION: Calculates next velocity for agent.
 % PARAMETERS:
@@ -16,7 +16,7 @@
 %
 % RETURNS:
 %   velocity
-%     - Velocity.
+%     - Velocity represented as [ v_x v_y ].
 %
 function [ velocity ] = velocity( w, c_1, c_2, global_best_solution, agent )
     r_1 = 0.5;

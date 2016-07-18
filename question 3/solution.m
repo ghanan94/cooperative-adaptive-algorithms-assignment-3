@@ -54,6 +54,9 @@ function [ solution ] = solution( population, min_x, max_x, min_y, max_y, max_it
         % Calculate agent's next velocity.
         agents( :, 3:4 ) = velocity( w, c_1, c_2, global_best, agents );
         
+        % Calculate agent's next position.
+        agents( :, 1:2 ) = next_position( agents, min_x, max_x, min_y, max_y );
+        
         % Update scatter plot.
         scatter( agents( :, 1 ), agents( :, 2 ) );
     end
