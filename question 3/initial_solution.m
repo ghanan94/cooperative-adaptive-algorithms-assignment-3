@@ -20,9 +20,12 @@
 %     - Matrix representing initial population of agents.
 %
 function [ initial_solution ] = initial_solution( population, min_x, max_x, min_y, max_y )
-    initial_solution = zeros( population, 4 );
+    initial_solution = zeros( population, 7 );
     initial_solution( :, 1 ) = ( rand( population, 1 ) .* ( max_x - min_x ) ) + min_x;
     initial_solution( :, 2 ) = ( rand( population, 1 ) .* ( max_y - min_y ) ) + min_y;
-    initial_solution( :, 4 ) = evaluate_equation( initial_solution( :, 1), initial_solution( :, 2 ) );
+    initial_solution( :, 5 ) = evaluate_equation( initial_solution( :, 1), initial_solution( :, 2 ) );
+    
+    % Set personal bests to current position.
+    initial_solution( :, 6:7 ) = initial_solution( :, 1:2 );
 end
 
