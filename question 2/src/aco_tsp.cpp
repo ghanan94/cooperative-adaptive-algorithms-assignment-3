@@ -32,7 +32,7 @@ void ACO_TSP::print_cities() const
 void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance, double const alpha, double const beta, bool const online_pheromone_update, bool const offline_pheromone_update ) const
 {
   // Actual soln from http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/bays29.opt.tour
-  std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20};
+  std::vector<unsigned int> actual_solution = {0,27,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,22,26,7,23,15,12,20};
   printf( "Optimal solution:\n" );
   this->print_solution( actual_solution );
 
