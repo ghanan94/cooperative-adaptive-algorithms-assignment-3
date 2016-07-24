@@ -32,7 +32,7 @@
 %    - Max value for Td, not-inclusive.
 %
 % RETURNS:
-%   solution
+%   solution [ Kp Ti Td ]
 %     - Best solution so far.
 %
 function [ solution ] = solution(...
@@ -93,7 +93,7 @@ function [ solution ] = solution(...
         title( 'Fitness vs. Generation' );
         xlabel( 'Generation' );
         ylabel( 'Fitness' );
-        pause( 0.001 );
+        pause( 0.0001 );
     end
     
     solution = best_solution( 1:3 );
