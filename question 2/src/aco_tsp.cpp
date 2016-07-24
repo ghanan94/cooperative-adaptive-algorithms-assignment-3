@@ -105,6 +105,10 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
       this->update_pheromone_values( pheromone_trails, temp_solution );
     }
 
+    // Print pheromone table.
+    // this->print_pheromone_table( pheromone_trails );
+
+    // Update best global solution if neccesary.
     if ( temp_cost < best_cost )
     {
       printf( "Previous best_cost = %f, New = %f\n", best_cost, temp_cost );
