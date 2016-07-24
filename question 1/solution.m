@@ -59,7 +59,7 @@ function [ solution ] = solution(...
     % population as initial_population will sort the population before
     % returning
     best_solution = population( 1, : );
-    fprintf( 'Initial best solution was %d\n', best_solution(4) );
+    %fprintf( 'Initial best solution was %d\n', best_solution(4) );
 
     
     % For plotting solution history
@@ -68,7 +68,7 @@ function [ solution ] = solution(...
     best_solution_history( 1 ) = best_solution( 4 );
     
     for generation = 1:generations
-        fprintf( 'Generation #%d\n', generation );
+        %fprintf( 'Generation #%d\n', generation );
         
         % Get list of all parents that will have offspring
         selected_parents = parent_selection( population );
@@ -83,7 +83,7 @@ function [ solution ] = solution(...
         % solution. If it is, update global best solution.
         % fprintf( 'Test best solution was %d\n', population( 1, 4 ) );
         if population( 1, 4 ) > best_solution( 4 )
-            fprintf( 'Previous best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
+            %fprintf( 'Previous best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
             best_solution = population( 1, : );
         end
         
