@@ -35,6 +35,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
   std::vector<unsigned int> actual_solution = {0,27,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,22,26,7,23,15,12,20};
   printf( "Optimal solution:\n" );
   this->print_solution( actual_solution );
+  this->print_solution_matlab_matrix( actual_solution );
 
   std::vector<ACO_TSP::Agent> agents;
   std::vector<std::vector<double>> pheromone_trails;
@@ -114,6 +115,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
   printf( "Best solution:\n" );
   this->print_solution( best_solution );
+  this->print_solution_matlab_matrix( best_solution );
 }
 
 void ACO_TSP::parse_problem_file( std::string const file_name )
@@ -327,4 +329,19 @@ void ACO_TSP::print_pheromone_table( std::vector<std::vector<double>> const &phe
 
     printf( "\n" );
   }
+}
+
+void ACO_TSP::print_solution_matlab_matrix( std::vector<unsigned int> const &solution ) const
+{
+  printf( "Matlab Matrix:\n" );
+  printf( "solution_matrix = [\n");
+
+  for ( int i = 0; i < solution.size(); ++i )
+  {
+    printf( " %f %f\n", cities[ solution[ i ] ]->get_x(), cities[ solution[ i ] ]->get_y() );
+  }
+
+  printf( " %f %f\n", cities[ solution.front() ]->get_x(), cities[ solution.front() ]->get_y() );
+
+  printf( "];\n");
 }

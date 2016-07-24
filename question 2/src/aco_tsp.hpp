@@ -302,6 +302,25 @@ private:
    *   N/A
    */
   void print_pheromone_table( std::vector<std::vector<double>> const & ) const;
+
+  /*
+   * NAME:          print_solution_matlab_matrix
+   *
+   * DESCRIPTION:   Print solution in a matlab matrix form. Each node
+   *                will be a row in the matrix, in the right order.
+   *                Each row will have 2 columns (x and y of node). To plot
+   *                the path in matlab, copy and pase the output to matlab, and
+   *                run this command:
+   *                plot( solution_matrix(:,1), solution_matrix(:,2), 'x-' ).
+   *
+   * PARAMETERS:
+   *   std::vector<unsigned int> const &solution
+   *     - Reference to solution.
+   *
+   * RETURNS:
+   *   N/A
+   */
+  void print_solution_matlab_matrix( std::vector<unsigned int> const & ) const;
 };
 
 #endif // __ACO_TSP__
