@@ -52,7 +52,7 @@ function [ solution ] = solution( population, min_x, max_x, min_y, max_y, w, c_1
     
     for iteration = 1:max_iterations
         % Pause so we can see the scatter plot updating and the changes.
-        %pause(0.2);
+        pause(0.1);
         
         % Get global best position.
         [ ~, min_z_index ] = min( agents( :, 5 ) );
