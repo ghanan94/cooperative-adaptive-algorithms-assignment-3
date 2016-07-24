@@ -61,6 +61,12 @@ function [ solution ] = solution(...
     best_solution = population( 1, : );
     fprintf( 'Initial best solution was %d\n', best_solution(4) );
 
+    
+    % For plotting solution history
+    hold off;
+    best_solution_history = zeros( 1, generations + 1 );
+    best_solution_history( 1 ) = best_solution( 4 );
+    
     for generation = 1:generations
         fprintf( 'Generation #%d\n', generation );
         
@@ -80,8 +86,16 @@ function [ solution ] = solution(...
             fprintf( 'Previous best solution was %d, new is %d\n', best_solution(4), population( 1, 4 ) );
             best_solution = population( 1, : );
         end
+        
+        % Plot solutions so far.
+        best_solution_history( generation + 1 ) = best_solution( 4 );
+        plot( 0:generation, best_solution_history( 1:( generation + 1 ) ) );
+        title( 'Fitness vs. Generation' );
+        xlabel( 'Generation' );
+        ylabel( 'Fitness' );
+        pause( 0.001 );
     end
-
+    
     solution = best_solution( 1:3 );
 end
 
