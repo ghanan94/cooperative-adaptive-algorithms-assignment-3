@@ -71,11 +71,17 @@ public:
    *   double const beta
    *     - How much the distance value matters for the probability of transition
    *       pij = Tij^alpha * (1/dij)^beta.
+   *   bool const online_pheromone_update
+   *     - Whether or not to apply the online pheromone update rule (delayed:
+   *       update each agent's travelled path).
+   *   bool const offline_pheromone_update
+   *     - Whether or not to apply the offline pheromone update rule (use best
+   *       solution in an iteration and update the path).
    *
    * RETURNS:
    *   N/A
    */
-  void solve( unsigned int const, unsigned int const, double const, double const, double const ) const;
+  void solve( unsigned int const, unsigned int const, double const, double const, double const, bool const, bool const ) const;
 
 private:
   /*

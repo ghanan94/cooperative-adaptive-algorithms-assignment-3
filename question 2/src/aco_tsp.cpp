@@ -29,7 +29,7 @@ void ACO_TSP::print_cities() const
   }
 }
 
-void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance, double const alpha, double const beta ) const
+void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_iterations, double const pheromone_persistance, double const alpha, double const beta, bool const online_pheromone_update, bool const offline_pheromone_update ) const
 {
   // Actual soln from http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/bays29.opt.tour
   std::vector<unsigned int> actual_solution = {0,28,5,11,8,4,25,28,2,1,19,9,3,14,17,16,13,21,10,18,24,6,23,26,7,23,15,12,20};
@@ -71,9 +71,13 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
     this->iterate( agents, pheromone_trails, pheromone_persistance, alpha, beta );
 
-    this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
+    if ( online_pheromone_update )
+    {
+      this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
+    }
 
-    // Find agent with best cost so far and reset agents
+    // Find agent with best cost so far and reset agents.
+    // Also apply online delayed pheromone updates.
     for ( int i = 0; i < population_size; ++i )
     {
       double cost = this->cost( agents[ i ].get_visited_city_history() );
@@ -84,13 +88,21 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
         temp_solution = agents[ i ].get_visited_city_history();
       }
 
-      this->update_pheromone_values( pheromone_trails, agents[ i ].get_visited_city_history() );
+      if ( online_pheromone_update )
+      {
+        this->update_pheromone_values( pheromone_trails, agents[ i ].get_visited_city_history() );
+      }
 
       agents[ i ].reset_visited_cities();
     }
 
-    this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
-    //this->print_pheromone_table( pheromone_trails );
+    if ( offline_pheromone_update )
+    {
+      this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
+
+      // Apply offline pheromone updates by using the best solution this iteration.
+      this->update_pheromone_values( pheromone_trails, temp_solution );
+    }
 
     if ( temp_cost < best_cost )
     {
