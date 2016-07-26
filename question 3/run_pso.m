@@ -29,11 +29,14 @@ c_1 = 1.4994;
 % global best solution so far.
 c_2 = 1.4994;
 
+% Max velocity (absolute value).
+max_velocity = Inf;
+
 % Max number of iterations before terminating. (Terminating condition).
 max_iterations = 100;
 
 % Run PSO giving above params
-best_solution = solution( population, min_x, max_x, min_y, max_y, w, c_1, c_2, max_iterations )
+best_solution = solution( population, min_x, max_x, min_y, max_y, w, c_1, c_2, max_velocity, max_iterations )
 
 % Calculate z value.
 best_z = evaluate_equation( best_solution( 1 ), best_solution( 2 ) )
