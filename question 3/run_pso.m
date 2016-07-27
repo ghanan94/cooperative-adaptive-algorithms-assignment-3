@@ -6,17 +6,9 @@ format long;
 % Number of agents.
 population = 50;
 
-% Min value for x.
-min_x = -5;
-
-% Max value for x.
-max_x = 5;
-
-% Min value for y.
-min_y = -5;
-
-% Max value for y.
-max_y = 5;
+% Agents within this radius of an agent is considered to be part of its 
+% neighborhood.
+neighbourhood_radius = 2;
 
 % Inertia weight.
 w = 0.792;
@@ -35,8 +27,20 @@ max_velocity = 1;
 % Max number of iterations before terminating. (Terminating condition).
 max_iterations = 100;
 
+% Min value for x.
+min_x = -5;
+
+% Max value for x.
+max_x = 5;
+
+% Min value for y.
+min_y = -5;
+
+% Max value for y.
+max_y = 5;
+
 % Run PSO giving above params
-best_solution = solution( population, min_x, max_x, min_y, max_y, w, c_1, c_2, max_velocity, max_iterations )
+best_solution = solution( population, neighbourhood_radius, w, c_1, c_2, max_velocity, max_iterations, min_x, max_x, min_y, max_y )
 
 % Calculate z value.
 best_z = evaluate_equation( best_solution( 1 ), best_solution( 2 ) )

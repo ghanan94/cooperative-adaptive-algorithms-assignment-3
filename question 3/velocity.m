@@ -10,6 +10,10 @@
 %              to the upper or lower bound.
 %
 % PARAMETERS:
+%   neighbourhood_radius (double)
+%     - Agents within the radius of an agent is considered to be part of
+%       its neighborhood. A value of Inf means neighbourhood is all agents
+%       (global).
 %   w (double)
 %     - Inertia weight.
 %   c_1 (double)
@@ -20,30 +24,38 @@
 %       agents' global best solution so far.
 %   max_velocity (double)
 %     - Maximum velocity bound (absolute value).
-%   global_best_solution [ x y ]
-%     - Vector in format [ x y ] representing best global solution so
-%       far.
-%   agent
-%     - Vector(Matrix) representing agent(s).
+%   agents
+%     - Vector(Matrix) representing agents.
+%   population (int)
+%     - Number of agents.
 %
 % RETURNS:
 %   velocity [ v_x v_y ]
 %     - Velocity represented as [ v_x v_y ].
 %
-function [ velocity ] = velocity( w, c_1, c_2, max_velocity, global_best_solution, agent )
+function [ velocity ] = velocity( neighbourhood_radius, w, c_1, c_2, max_velocity, agents, population )
     r_1 = 0.5;
     r_2 = 0.5;
     
-    velocity = zeros( length( agent ), 2 );
+    velocity = zeros( population, 2 );
+    neighbourhood_best_solution = zeros( population, 2 );
     
-    velocity( :, 1 ) = min( max_velocity, max( -1 * max_velocity, ( w .* agent( :, 4 ) ) + ... 
-                        ( c_1 .* r_1  .* ( agent( :, 6 ) - agent( :, 1 ) ) ) + ...
-                        ( c_2 .* r_2  .* ( global_best_solution( 1 ) - agent( :, 1 ) ) ) ...
+    for i = 1:population
+        neighbourhood_agents = agents( sqrt( ( agents( :, 1 ) - agents( i, 1 ) ) .^ 2 + ( agents( :, 2 ) - agents( i, 2 ) ) .^ 2 ) <= neighbourhood_radius, : );
+        
+        [ ~, min_z_index ] = min( neighbourhood_agents( : , 5 ) );
+        
+        neighbourhood_best_solution( i, : ) = neighbourhood_agents( min_z_index, 1:2 );
+    end
+    
+    velocity( :, 1 ) = min( max_velocity, max( -1 * max_velocity, ( w .* agents( :, 4 ) ) + ... 
+                        ( c_1 .* r_1  .* ( agents( :, 6 ) - agents( :, 1 ) ) ) + ...
+                        ( c_2 .* r_2  .* ( neighbourhood_best_solution( :, 1 ) - agents( :, 1 ) ) ) ...
                        ));          
 
-    velocity( :, 2 ) = min( max_velocity, max( -1 * max_velocity, ( w .* agent( :, 5 ) ) + ... 
-                        ( c_1 .* r_1  .* ( agent( :, 7 ) - agent( :, 2 ) ) ) + ...
-                        ( c_2 .* r_2  .* ( global_best_solution( 2 ) - agent( :, 2 ) ) ) ...
+    velocity( :, 2 ) = min( max_velocity, max( -1 * max_velocity, ( w .* agents( :, 5 ) ) + ... 
+                        ( c_1 .* r_1  .* ( agents( :, 7 ) - agents( :, 2 ) ) ) + ...
+                        ( c_2 .* r_2  .* ( neighbourhood_best_solution( :, 2 ) - agents( :, 2 ) ) ) ...
                        ));
 end
 
