@@ -23,14 +23,14 @@ w = 0.792;
 
 % Acceleration coefficient representing how much to trust own best solution 
 % so far.
-c_1 = 1.4994;
+c_1 = 1.4944;
 
 % Acceleration coefficient representing how much to trust other agents' 
 % global best solution so far.
-c_2 = 1.4994;
+c_2 = 1.4944;
 
 % Max velocity (absolute value).
-max_velocity = Inf;
+max_velocity = 1;
 
 % Max number of iterations before terminating. (Terminating condition).
 max_iterations = 100;
