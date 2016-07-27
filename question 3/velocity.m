@@ -4,10 +4,10 @@
 % DESCRIPTION: Calculates next velocity for agent. Neext velocity is
 %              calculated as: new_v = ( w * v ) + 
 %              ( c_1 * r_1 * ( personal_best - current_position ) ) +
-%              ( c_2 * r_2 * ( global_best - current_position ) ). new_v is
-%              guaranteed to be within [ -max_velocity, max_velocity ]. If
-%              it is calculated to be out of these bounds, it will be set
-%              to the upper or lower bound.
+%              ( c_2 * r_2 * ( neighbourhood_best - current_position ) ). 
+%              new_v is guaranteed to be within [ -max_velocity, 
+%              max_velocity ]. If it is calculated to be out of these
+%              bounds, it will be set to the upper or lower bound.  
 %
 % PARAMETERS:
 %   neighbourhood_radius (double)
@@ -41,10 +41,12 @@ function [ velocity ] = velocity( neighbourhood_radius, w, c_1, c_2, max_velocit
     neighbourhood_best_solution = zeros( population, 2 );
     
     for i = 1:population
+        % Get all agents that are within agent i's radius (including
+        % itself).
         neighbourhood_agents = agents( sqrt( ( agents( :, 1 ) - agents( i, 1 ) ) .^ 2 + ( agents( :, 2 ) - agents( i, 2 ) ) .^ 2 ) <= neighbourhood_radius, : );
         
+        % Get the best solution from the neighbourhood.
         [ ~, min_z_index ] = min( neighbourhood_agents( : , 5 ) );
-        
         neighbourhood_best_solution( i, : ) = neighbourhood_agents( min_z_index, 1:2 );
     end
     
