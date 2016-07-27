@@ -4,7 +4,10 @@
 % DESCRIPTION: Calculates next velocity for agent. Neext velocity is
 %              calculated as: new_v = ( w * v ) + 
 %              ( c_1 * r_1 * ( personal_best - current_position ) ) +
-%              ( c_2 * r_2 * ( global_best - current_position ) ).
+%              ( c_2 * r_2 * ( global_best - current_position ) ). new_v is
+%              guaranteed to be within [ -max_velocity, max_velocity ]. If
+%              it is calculated to be out of these bounds, it will be set
+%              to the upper or lower bound.
 %
 % PARAMETERS:
 %   w (double)
