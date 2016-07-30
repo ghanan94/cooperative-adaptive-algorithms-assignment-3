@@ -48,7 +48,7 @@ function [ velocity ] = velocity( neighbourhood_radius, w, c_1, c_2, max_velocit
         % Get the best known solution from the neighbourhood.
         % (Get the best, personal best solution from neighbourhood agents)
         [ ~, min_z_index ] = min( neighbourhood_agents( : , 8 ) );
-        neighbourhood_best_solution( i, : ) = neighbourhood_agents( min_z_index, 1:2 );
+        neighbourhood_best_solution( i, : ) = neighbourhood_agents( min_z_index, 6:7 );
     end
     
     velocity( :, 1 ) = min( max_velocity, max( -1 * max_velocity, ( w .* agents( :, 4 ) ) + ... 
