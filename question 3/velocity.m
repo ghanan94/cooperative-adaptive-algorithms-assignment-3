@@ -34,8 +34,8 @@
 %     - Velocity represented as [ v_x v_y ].
 %
 function [ velocity ] = velocity( neighbourhood_radius, w, c_1, c_2, max_velocity, agents, population )
-    r_1 = 0.5;
-    r_2 = 0.5;
+    r_1 = rand( population, 1 );
+    r_2 = rand( population, 1 );
     
     velocity = zeros( population, 2 );
     neighbourhood_best_solution = zeros( population, 2 );
