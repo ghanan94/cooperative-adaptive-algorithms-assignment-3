@@ -45,9 +45,12 @@ function [ offspring ] = generate_offspring( ...
     min_Td, ...
     max_Td ...
 )
-    offspring = parents;
+    % Randomize parents ordering.
+    [ num_parents, ~ ] = size( parents );
+    ordering = randperm( num_parents );
+    offspring = parents( ordering, : );
 
-    for i = 1:2:( length( parents ) - 1 )
+    for i = 1:2:( num_parents - 1 )
         for j = 1:3
             % Crossover
             if rand() <= crossover_probability
@@ -66,7 +69,7 @@ function [ offspring ] = generate_offspring( ...
                     case 3
                         offspring( i, j ) = ( max_Td - min_Td ) * rand() + min_Td;
                     otherwise
-                        error('Unexpected j value');
+                        error( 'Unexpected j value' );
                 end
             end
 
