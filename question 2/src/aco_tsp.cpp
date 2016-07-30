@@ -72,10 +72,7 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
     this->iterate( agents, pheromone_trails, pheromone_persistance, alpha, beta );
 
-    if ( online_pheromone_update )
-    {
-      this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
-    }
+    this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
 
     // Find agent with best cost so far and reset agents.
     // Also apply online delayed pheromone updates.
@@ -99,8 +96,6 @@ void ACO_TSP::solve( unsigned int const population_size, unsigned int const max_
 
     if ( offline_pheromone_update )
     {
-      this->evaporate_pheromone_trails( pheromone_trails, pheromone_persistance );
-
       // Apply offline pheromone updates by using the best solution this iteration.
       this->update_pheromone_values( pheromone_trails, temp_solution );
     }
