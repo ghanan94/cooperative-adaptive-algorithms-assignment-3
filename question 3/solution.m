@@ -77,9 +77,9 @@ function [ solution ] = solution( population, neighbourhood_radius, w, c_1, c_2,
     end
     
     % Get global best position.
-    [ ~, min_z_index ] = min( agents( :, 5 ) );
+    [ ~, min_z_index ] = min( agents( :, 8 ) );
     solution = agents( min_z_index, 1:2 );
     
     % Mark solution with an x.
-    scatter( solution(1 ), solution( 2 ), 'x' );
+    scatter( solution( 1 ), solution( 2 ), 'x' );
 end
