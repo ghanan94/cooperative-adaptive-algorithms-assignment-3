@@ -27,6 +27,9 @@ function [ initial_solution ] = initial_solution( population, min_x, max_x, min_
     initial_solution( :, 2 ) = ( rand( population, 1 ) .* ( max_y - min_y ) ) + min_y;
     initial_solution( :, 3 ) = evaluate_equation( initial_solution( :, 1), initial_solution( :, 2 ) );
     
+    initial_solution( :, 4 ) = 1;
+    initial_solution( :, 5 ) = 1;
+    
     % Set personal bests to current position.
     initial_solution( :, 6:8 ) = initial_solution( :, 1:3 );
 end

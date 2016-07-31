@@ -1,7 +1,7 @@
 %
 % NAME:        next_position
 %
-% DESCRIPTION: Calculates next position for agent.
+% DESCRIPTION: Calculates next position and z for agent.
 %
 % PARAMETERS:
 %   agent
@@ -18,13 +18,14 @@
 %     - Max value for y.
 %
 % RETURNS:
-%   next_position [ x y ]
-%     - Next position represented by [ x y ].
+%   next_position [ x y z ]
+%     - Next position represented by [ x y z ].
 %
 function [ next_position ] = next_position( agent, population, min_x, max_x, min_y, max_y )
-    next_position = zeros( population, 2 );
+    next_position = zeros( population, 3 );
     
     next_position( :, 1 ) = max( min( agent( :, 1 ) + agent( :, 4 ), max_x ), min_x );
     next_position( :, 2 ) = max( min( agent( : ,2 ) + agent( :, 5 ), max_y ), min_y );
+    next_position( :, 3 ) = evaluate_equation( next_position( :, 1 ), next_position( :, 2 ) );
 end
 

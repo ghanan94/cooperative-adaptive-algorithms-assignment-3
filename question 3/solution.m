@@ -22,6 +22,12 @@
 %   c_2 (double)
 %     - Acceleration coefficient representing how much to trust other
 %       agents' global best solution so far.
+%   gcpso (boolean)
+%     - Disable guaranteed convergence pso when 0; enable otherwise.
+%   s_c (int)
+%     - Number of successes before scaling factor update.
+%   f_c (int)
+%     - Number of failures before scaling factor update.
 %   max_velocity (double)
 %     - Maximum velocity bound (absolute value).
 %   max_iterations (int)
@@ -39,7 +45,7 @@
 %   solution [ x y ]
 %     - Best x and y values in the format [ x y ].
 %
-function [ solution ] = solution( population, neighbourhood_radius, w, c_1, c_2, max_velocity, max_iterations, min_x, max_x, min_y, max_y )
+function [ solution ] = solution( population, neighbourhood_radius, w, c_1, c_2, gcpso, s_c, f_c, max_velocity, max_iterations, min_x, max_x, min_y, max_y )
     % For the agents matrix: Each agent is represented by a row. Column1
     % will be the agent's current x value. Column2 will be the agent's
     % current y value. Column3 will be the agent's current valuation for z.
@@ -52,7 +58,13 @@ function [ solution ] = solution( population, neighbourhood_radius, w, c_1, c_2,
     hold off;
     
     agents = initial_solution( population, min_x, max_x, min_y, max_y );
-
+    scaling_factor = 1;
+    success_count = 0;
+    failure_count = 0;
+    
+    % Get global best position.
+    [ prev_global_best_agent_current_z, global_best_agent_idx ] = min( agents( :, 8 ) );
+    
     scatter( agents( :, 1 ), agents( :, 2 ) );
     hold on;
     
@@ -61,24 +73,53 @@ function [ solution ] = solution( population, neighbourhood_radius, w, c_1, c_2,
         pause(0.1);
         
         % Calculate agent's next velocity.
-        agents( :, 4:5 ) = velocity( neighbourhood_radius, w, c_1, c_2, max_velocity, agents, population );
+        agents( :, 4:5 ) = velocity( neighbourhood_radius, w, c_1, c_2, gcpso, scaling_factor, global_best_agent_idx, max_velocity, agents, population );
         
-        % Calculate agent's next position.
-        agents( :, 1:2 ) = next_position( agents, population, min_x, max_x, min_y, max_y );
-        
-        % Calculate agent's z values.
-        agents( :, 3 ) = evaluate_equation( agents( :, 1 ), agents( :, 2 ) );
+        % Calculate agent's next position and z values.
+        agents( :, 1:3 ) = next_position( agents, population, min_x, max_x, min_y, max_y );
         
         % Update personal bests if neccessary.
         agents( agents( :, 3 ) < agents( :, 8 ), 6:8 ) = agents( agents( :, 3 ) < agents( :, 8 ), 1:3 );
+        
+        % Get global best position.
+        [ ~, temp_best_agent_idx ] = min( agents( :, 8 ) );
+        
+        if global_best_agent_idx ~= temp_best_agent_idx
+            success_count = 0;
+            failure_count = 0;
+            scaling_factor = 1;
+        else            
+            global_best_new_current_z = agents( temp_best_agent_idx, 3 );
+            
+            if prev_global_best_agent_current_z < global_best_new_current_z
+                % New step gets worse for current global best solution
+                failure_count = failure_count + 1;
+                success_count = 0;
+
+                if failure_count > f_c
+                    scaling_factor = 0.5 * scaling_factor;
+                end
+            else
+                if prev_global_best_agent_current_z > global_best_new_current_z
+                    % New step gets better for current global best solution
+                    success_count = success_count + 1;
+                    failure_count = 0;
+
+                    if success_count > s_c
+                        scaling_factor = 2 * scaling_factor;
+                    end
+                end
+            end
+        end
+         
+        global_best_agent_idx = temp_best_agent_idx;
+        prev_global_best_agent_current_z = agents( global_best_agent_idx, 3 );
         
         % Update scatter plot.
         scatter( agents( :, 1 ), agents( :, 2 ) );
     end
     
-    % Get global best position.
-    [ ~, min_z_index ] = min( agents( :, 8 ) );
-    solution = agents( min_z_index, 1:2 );
+    solution = agents( global_best_agent_idx, 6:7 );
     
     % Mark solution with an x.
     scatter( solution( 1 ), solution( 2 ), 'x' );

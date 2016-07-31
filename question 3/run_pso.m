@@ -8,7 +8,7 @@ population = 50;
 
 % Agents within this radius of an agent is considered to be part of its 
 % neighborhood.
-neighbourhood_radius = 2;
+neighbourhood_radius = Inf;
 
 % Inertia weight.
 w = 0.792;
@@ -20,6 +20,15 @@ c_1 = 1.4944;
 % Acceleration coefficient representing how much to trust other agents' 
 % global best solution so far.
 c_2 = 1.4944;
+
+% GCPSO
+gcpso = 1;
+
+% Number of successes before scaling factor update.
+s_c = 5;
+
+% Number of failures before scaling factor update.
+f_c = 5;
 
 % Max velocity (absolute value).
 max_velocity = 1;
@@ -40,7 +49,7 @@ min_y = -5;
 max_y = 5;
 
 % Run PSO giving above params
-best_solution = solution( population, neighbourhood_radius, w, c_1, c_2, max_velocity, max_iterations, min_x, max_x, min_y, max_y )
+best_solution = solution( population, neighbourhood_radius, w, c_1, c_2, gcpso, s_c, f_c, max_velocity, max_iterations, min_x, max_x, min_y, max_y )
 
 % Calculate z value.
 best_z = evaluate_equation( best_solution( 1 ), best_solution( 2 ) )
