@@ -1,14 +1,12 @@
 % Run the PSO algorithm to find best set of x and y given the below
 % parameters.
 
-format long;
-
 % Number of agents.
-population = 50;
+population = 10;
 
 % Agents within this radius of an agent is considered to be part of its 
 % neighborhood.
-neighbourhood_radius = Inf;
+neighbourhood_radius = 2;
 
 % Inertia weight.
 w = 0.792;
@@ -34,7 +32,7 @@ f_c = 5;
 max_velocity = 1;
 
 % Max number of iterations before terminating. (Terminating condition).
-max_iterations = 100;
+max_iterations = 50;
 
 % Min value for x.
 min_x = -5;
@@ -53,5 +51,3 @@ best_solution = solution( population, neighbourhood_radius, w, c_1, c_2, gcpso, 
 
 % Calculate z value.
 best_z = evaluate_equation( best_solution( 1 ), best_solution( 2 ) )
-
-format;
