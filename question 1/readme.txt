@@ -11,7 +11,8 @@ the better the odds of survival, so the negative of ISE represents the fitness
 
 c) Done.
 
-d) Done.  Run 'run_ga' as mentioned above to see the plot as it is being run.
+d) Done.  See plot.png in this folder.
+OR Run 'run_ga' as mentioned above to see the plot as it is being run.
 
 e) Crossover & mutation are 0.6 and 0.25 respectively.
 +--------------+--------------+--------------+---------+---------+---------+
